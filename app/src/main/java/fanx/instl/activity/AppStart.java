@@ -29,6 +29,7 @@ public class AppStart extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+/*
                 InstagramSession i = new InstagramSession(AppStart.this);
                 try {
                     if (i.hasAccessToken()) {
@@ -52,9 +53,14 @@ public class AppStart extends AppCompatActivity {
                 } catch (NullPointerException ne) {
 
                 }
+*/
+                Intent mainIntent = new Intent(AppStart.this, MainActivity.class);
+                startActivity(mainIntent);
 
             }
+
         }, SPLASH_DISPLAY_LENGTH);
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
