@@ -1,4 +1,4 @@
-package fanx.instl;
+package fanx.instl.activity;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import butterknife.Bind;
+import butterknife.OnClick;
+import fanx.instl.R;
 
 public class MainActivity extends AppCompatActivity {
     // Declaration
@@ -63,5 +65,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // Listner
+
+    @OnClick(R.id.fab)
+    public void onTakePhotoClick() {
+        int[] startingLocation = new int[2];
+        fabCreate.getLocationOnScreen(startingLocation);
+        startingLocation[0] += fabCreate.getWidth() / 2;
+        TakePhotoActivity.startCameraFromLocation(startingLocation, this);
+        overridePendingTransition(0, 0);
     }
 }
