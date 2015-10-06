@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import fanx.instag.R;
-import fanx.instag.activities.util.InstagramClass;
+import fanx.instl.R;
+import fanx.instl.activity.InstagramUtils.InstagramClass;
 
 
 public class LoginActivity extends Activity {

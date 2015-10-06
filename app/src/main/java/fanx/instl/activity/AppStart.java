@@ -8,17 +8,22 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
+import fanx.instl.activity.InstagramUtils.InstagramSession;
+import fanx.instl.R;
 
 public class AppStart extends AppCompatActivity {
     private final int SPLASH_DISPLAY_LENGTH = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_app_start);
 
         // Splash screen for SPLASH_DISPLAY_LENGTH milliseconds
         new Handler().postDelayed(new Runnable() {
@@ -51,5 +56,63 @@ public class AppStart extends AppCompatActivity {
             }
         }, SPLASH_DISPLAY_LENGTH);
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        //getMenuInflater().inflate(R.menu.menu_app_start, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+        Log.e("AppStart", "onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();  // Always call the superclass method first
+        // Release the Camera because we don't need it when paused
+        // and other activities might need to use it.
+        Log.e("AppStart", "onPause");
+        //Toast.makeText(GridActivity.this, "On Pause Called", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();  // Always call the superclass method first
+        // Save the note's current draft, because the activity is stopping
+        // and we want to be sure the current note progress isn't lost.
+        Log.e("AppStart", "onStop");
+    }
+
+    protected void onStart() {
+        super.onStart();  // Always call the superclass method first
+        // The activity is either being restarted or started for the first time
+        Log.e("AppStart", "onStart");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();  // Always call the superclass method first
+        // Activity being restarted from stopped state
+        Log.e("AppStart", "onRestart");
+    }
 }

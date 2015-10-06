@@ -1,4 +1,4 @@
-package fanx.instl.InstagramUtils;
+package fanx.instl.activity.InstagramUtils;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -28,7 +28,7 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import fanx.instag.activities.AppData;
+import fanx.instl.activity.InstagramUtils.AppData;
 
 
 /**

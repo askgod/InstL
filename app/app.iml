@@ -98,6 +98,7 @@
     <orderEntry type="library" exported="" name="hugo-annotations-1.1.0" level="project" />
     <orderEntry type="library" exported="" name="butterknife-7.0.1" level="project" />
     <orderEntry type="library" exported="" name="timber-2.5.0" level="project" />
+    <orderEntry type="library" exported="" name="jsoup-1.8.3" level="project" />
     <orderEntry type="library" exported="" name="rebound-0.3.6" level="project" />
     <orderEntry type="library" exported="" name="hugo-runtime-1.1.0" level="project" />
     <orderEntry type="library" exported="" name="recyclerview-v7-23.0.1" level="project" />

@@ -1,4 +1,4 @@
-package fanx.instl.InstagramUtils;
+package fanx.instl.activity.InstagramUtils;
 
 /**
  * Created by SShrestha on 25/09/2015.
@@ -9,7 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import fanx.instag.activities.LoginActivity;
+import fanx.instl.activity.LoginActivity;
 
 /**
  * Created by SShrestha on 25/09/2015.
