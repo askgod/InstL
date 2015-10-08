@@ -7,8 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import fanx.instl.R;
+import fanx.instl.activity.InstagramUtils.InstagramSession;
 
 public class AppStart extends AppCompatActivity {
     private final int SPLASH_DISPLAY_LENGTH = 1000;
@@ -22,7 +24,7 @@ public class AppStart extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                /*
+
                 InstagramSession i = new InstagramSession(AppStart.this);
                 try {
                     if (i.hasAccessToken()) {
@@ -32,6 +34,7 @@ public class AppStart extends AppCompatActivity {
                         Log.e("AppStart", "Main Activity");
                         Intent mainIntent = new Intent(AppStart.this, MainActivity.class);
                         startActivity(mainIntent);
+                        finish();
 
                         //This is example call for for Search User
                         //mAppData.searchUser(AppStart.this, "sandip", 3);
@@ -45,9 +48,7 @@ public class AppStart extends AppCompatActivity {
                     }
                 } catch (NullPointerException ne) {
 
-                }*/
-              Intent mainIntent = new Intent(AppStart.this, MainActivity.class);
-              startActivity(mainIntent);
+                }
 
             }
 

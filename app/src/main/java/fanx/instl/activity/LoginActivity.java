@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import fanx.instl.R;
 import fanx.instl.activity.InstagramUtils.InstagramClass;
+import fanx.instl.activity.MainActivity;
 
 
 public class LoginActivity extends Activity {

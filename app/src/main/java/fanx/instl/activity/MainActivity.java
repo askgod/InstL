@@ -23,7 +23,7 @@ import fanx.instl.activity.adapter.FeedAdapter;
 import fanx.instl.utils.FeedContextMenuManager;
 import fanx.instl.utils.Utils;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFeedItemClickListener{
     // Declaration
 
     @Bind(R.id.rvFeed)
@@ -47,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        //
+        setupFeed();
 /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -191,4 +192,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onCommentsClick(View v, int position) {
+
+    }
+
+    @Override
+    public void onMoreClick(View v, int position) {
+
+    }
+
+    @Override
+    public void onProfileClick(View v) {
+
+    }
 }

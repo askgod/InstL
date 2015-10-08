@@ -16,7 +16,8 @@
         </layer-list>
     </item>
     <item android:state_pressed="true">
-        <shape android:bottom="0dp" android:left="2dp" android:right="0dp" android:shape="rectangle" android:top="2dp">
+        <shape android:bottom="0dp" android:left="2dp" android:right="0dp"
+            android:shape="rectangle" android:top="2dp">
             <solid android:color="@color/btn_send_pressed" />
         </shape>
     </item>

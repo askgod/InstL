@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="fanx.instl" >
+
     <!-- permission to access internet resource -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Camera permission -->
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -20,19 +23,21 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
+
         <!-- Welcome -->
         <activity
-            android:name="fanx.instl.activity.AppStart"
+            android:name=".activity.AppStart"
             android:label="@string/title_activity_app_start"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <!-- Login -->
         <activity
-            android:name="fanx.instl.activity.LoginActivity"
+            android:name=".activity.LoginActivity"
             android:label="Login" >
         </activity>
         <!-- Main Activity -->
@@ -51,8 +56,18 @@
             android:label="@string/title_activity_take_photo"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity android:name=".activity.BaseActivity" >
+        </activity>
+        <activity android:name=".activity.BaseDrawerActivity" >
+        </activity>
+
+        <activity android:name=".activity.PublishActivity" >
+        </activity>
+
+        <activity
+            android:name="fanx.instl.activity.UserProfileActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.TransparentActivity" />
     </application>
 
 </manifest>
-
-

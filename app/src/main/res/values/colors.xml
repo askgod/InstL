@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#03A9F4</color>
+    <color name="colorPrimaryDark">#0288D1</color>
+    <color name="colorAccent">#CDDC39</color>
 
-    <color name="style_color_primary">#2d5d82</color>
-    <color name="style_color_primary_dark">#21425d</color>
-    <color name="style_color_accent">#01bcd5</color>
+    <color name="style_color_primary">#03A9F4</color>
+    <color name="style_color_primary_dark">#0288D1</color>
+    <color name="style_color_accent">#CDDC39</color>
 
     <color name="fab_color_pressed">#007787</color>
     <color name="fab_color_shadow">#44000000</color>
 
-    <color name="btn_default_light_normal">#00000000</color>
+    <color name="btn_default_light_normal">#CDDC39</color>
     <color name="btn_default_light_pressed">#40ffffff</color>
-    <color name="btn_send_normal">#02c754</color>
+    <color name="btn_send_normal">#CDDC39</color>
     <color name="btn_send_pressed">#006633</color>
     <color name="btn_default_shadow">#99000000</color>
     <color name="btn_context_menu_normal">#ffffff</color>
