@@ -52,7 +52,7 @@
                     android:layout_height="48dp"
                     android:layout_marginLeft="24dp"
                     android:background="@drawable/btn_default_light"
-                    android:src="@drawable/ic_flash_light" />
+                    android:src="@drawable/ic_flash_on_white_18pt_3x" />
             </LinearLayout>
 
             <LinearLayout

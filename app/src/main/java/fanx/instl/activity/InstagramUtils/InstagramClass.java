@@ -1,9 +1,5 @@
 package fanx.instl.activity.InstagramUtils;
 
-/**
- * Created by SShrestha on 25/09/2015.
- */
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -32,9 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
-
-import fanx.instl.activity.InstagramUtils.AppData;
-import fanx.instl.activity.InstagramUtils.InstagramSession;
 
 
 /**
@@ -84,13 +77,9 @@ public class InstagramClass extends AsyncTask <Void, Void, Boolean>{
             // 2. Construct above post's content and then send a POST request for authentication & code
             String code = this.getCode(FORCE_CLASSIC_LOGIN_URL, postParams);
 
-            if (code != null)
-                Log.e("Code", code);
             // 3. Request Access Token.
             if (code != null) {
                 this.getAccessToken(code);
-                Intent loginIntent = new Intent(nextIntent);
-                currentActivity.startActivity(loginIntent);
             }
             else {
                 currentActivity.runOnUiThread(new Runnable() {
@@ -98,6 +87,8 @@ public class InstagramClass extends AsyncTask <Void, Void, Boolean>{
                         Toast.makeText(currentActivity, "Invalid Username/Password", Toast.LENGTH_SHORT).show();
                     }
                 });
+                return false;
+
             }
         }catch (Exception e) {
             e.printStackTrace();
@@ -111,9 +102,16 @@ public class InstagramClass extends AsyncTask <Void, Void, Boolean>{
         if (result)
         {
             //Context c = currentActivity.getApplicationContext();
-            Log.e("InstagramClass", "onPostExecute");
-            Intent loginIntent = new Intent(nextIntent);
-            currentActivity.startActivity(loginIntent);
+
+            if (result) {
+                Log.e("InstagramClass", "Starting Main Activity");
+                Intent loginIntent = new Intent(nextIntent);
+                currentActivity.startActivity(loginIntent);
+            }
+            else {
+                Log.e("InstagramClass", "Restarting Login Intent");
+                currentActivity.startActivity(currentActivity.getIntent());
+            }
 
         }
     }
@@ -121,7 +119,6 @@ public class InstagramClass extends AsyncTask <Void, Void, Boolean>{
     private String getCode(String url, String postParams) throws Exception {
 
         URL obj = new URL(url);
-        Log.e("URL",url);
         // First set the default cookie manager.
         CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
         httpsConnection = (HttpsURLConnection) obj.openConnection();
@@ -141,7 +138,7 @@ public class InstagramClass extends AsyncTask <Void, Void, Boolean>{
         }
 
         httpsConnection.setRequestProperty("Connection", "keep-alive");
-        httpsConnection.setRequestProperty("Referer", "https://instagram.com/accounts/login/?force_classic_login=&next=/oauth/authorize/%3Fclient_id%3D5a842f46c9ab4d8fbbb8bfd1ff1a70d2%26redirect_uri%3Dhttps%3A//github.com/fanxeon/InstaG%26response_type%3Dcode%26display%3Dtouch%26scope%3Dlikes%2Bcomments%2Brelationships");
+        httpsConnection.setRequestProperty("Referer", url);
         httpsConnection.setRequestProperty("Content-Type", CONTENT_TYPE);
         httpsConnection.setRequestProperty("Content-Length", Integer.toString(postParams.length()));
 
@@ -159,68 +156,73 @@ public class InstagramClass extends AsyncTask <Void, Void, Boolean>{
 
         // Send post request
         httpsConnection.connect();
-        InputStream is = httpsConnection.getInputStream();
 
-        String redirectURL = (httpsConnection.getURL()).toString();
+        int responseCode = httpsConnection.getResponseCode();
 
-        System.out.println(redirectURL);
+        if(responseCode == 200) {
 
+            InputStream is = httpsConnection.getInputStream();
 
-
-        if (redirectURL.contains("http://www.vexnepal.org?code=")) {
-            is.close();
-            return redirectURL.replace("http://www.vexnepal.org?code=", "");
-        }
-        else {
-            is = httpsConnection.getInputStream();
+            String redirectURL = (httpsConnection.getURL()).toString();
 
             System.out.println(redirectURL);
 
-            String actionParam = getFormParams(AppData.streamToString(is));
-            URL authorizeURL = new URL(redirectURL);
+            if (redirectURL.contains("http://www.vexnepal.org?code=")){
+                return redirectURL.replace("http://www.vexnepal.org?code=", "");
+            }
+            else{
+                String actionParam = getFormParams(AppData.streamToString(is));
+                URL authorizeURL = new URL(redirectURL);
 
-            HttpsURLConnection httpsConnectionAuthorize = (HttpsURLConnection) authorizeURL.openConnection();
+                HttpsURLConnection httpsConnectionAuthorize = (HttpsURLConnection) authorizeURL.openConnection();
 
-            httpsConnectionAuthorize.setInstanceFollowRedirects(true);  //handle redirect manually.
+                httpsConnectionAuthorize.setInstanceFollowRedirects(true);  //handle redirect manually.
 
-            // Acts like a browser
-            httpsConnectionAuthorize.setUseCaches(false);
-            httpsConnectionAuthorize.setRequestMethod("POST");
-            httpsConnectionAuthorize.setRequestProperty("Host", "instagram.com");
-            httpsConnectionAuthorize.setRequestProperty("User-Agent", USER_AGENT);
-            httpsConnectionAuthorize.setRequestProperty("Accept", ACCEPT);
-            httpsConnectionAuthorize.setRequestProperty("Accept-Language", ACCEPT_LANGUAGE);
+                // Acts like a browser
+                httpsConnectionAuthorize.setUseCaches(false);
+                httpsConnectionAuthorize.setRequestMethod("POST");
+                httpsConnectionAuthorize.setRequestProperty("Host", "instagram.com");
+                httpsConnectionAuthorize.setRequestProperty("User-Agent", USER_AGENT);
+                httpsConnectionAuthorize.setRequestProperty("Accept", ACCEPT);
+                httpsConnectionAuthorize.setRequestProperty("Accept-Language", ACCEPT_LANGUAGE);
 
-            for (String cookie : this.cookies) {
-                httpsConnectionAuthorize.addRequestProperty("Cookie", cookie.split(";", 1)[0]);
+                for (String cookie : this.cookies) {
+                    httpsConnectionAuthorize.addRequestProperty("Cookie", cookie.split(";", 1)[0]);
+                }
+
+                httpsConnectionAuthorize.setRequestProperty("Connection", "keep-alive");
+                httpsConnectionAuthorize.setRequestProperty("Referer", redirectURL);
+                httpsConnectionAuthorize.setRequestProperty("Content-Type", CONTENT_TYPE);
+
+
+
+                httpsConnectionAuthorize.setRequestProperty("Content-Length", Integer.toString(actionParam.length()));
+
+                httpsConnectionAuthorize.setDoOutput(true);
+                httpsConnectionAuthorize.setDoInput(true);
+                wr = new DataOutputStream(httpsConnectionAuthorize.getOutputStream());
+                wr.writeBytes(actionParam);
+                wr.flush();
+                wr.close();
+
+                System.out.println("Authorizing request...");
+
+                httpsConnectionAuthorize.connect();
+                is = httpsConnectionAuthorize.getInputStream();
+                redirectURL = (httpsConnectionAuthorize.getURL()).toString();
+
+                System.out.println(redirectURL);
+                if (redirectURL.contains("http://www.vexnepal.org?code="))
+                    return redirectURL.replace("http://www.vexnepal.org?code=", "");
+
+
             }
 
-            httpsConnectionAuthorize.setRequestProperty("Connection", "keep-alive");
-            httpsConnectionAuthorize.setRequestProperty("Referer", redirectURL);
-            httpsConnectionAuthorize.setRequestProperty("Content-Type", CONTENT_TYPE);
-
-            httpsConnectionAuthorize.setRequestProperty("Content-Length", Integer.toString(actionParam.length()));
-
-            httpsConnectionAuthorize.setDoOutput(true);
-            httpsConnectionAuthorize.setDoInput(true);
-            wr = new DataOutputStream(httpsConnectionAuthorize.getOutputStream());
-            wr.writeBytes(actionParam);
-            wr.flush();
-            wr.close();
-
-            System.out.println("Authorizing request...");
-
-            httpsConnectionAuthorize.connect();
-            is = httpsConnectionAuthorize.getInputStream();
-            redirectURL = (httpsConnectionAuthorize.getURL()).toString();
-
-            System.out.println(redirectURL);
-            if (redirectURL.contains("http://www.vexnepal.org?code="))
-                return redirectURL.replace("http://www.vexnepal.org?code=", "");
-            else
-                return null;
+            is.close();
 
         }
+
+        return null;
 
     }
 
@@ -261,7 +263,6 @@ public class InstagramClass extends AsyncTask <Void, Void, Boolean>{
 
         // Get the response cookies
         setCookies(httpsConnection.getHeaderFields().get("Set-Cookie"));
-        Log.e("GetPageContent", response.toString());
         return response.toString();
     }
 
@@ -298,7 +299,6 @@ public class InstagramClass extends AsyncTask <Void, Void, Boolean>{
             }
         }
 
-        Log.e("Parameters",result.toString() );
         return result.toString();
 
     }
@@ -406,4 +406,3 @@ public class InstagramClass extends AsyncTask <Void, Void, Boolean>{
         this.cookies = cookies;
     }
 }
-//Original

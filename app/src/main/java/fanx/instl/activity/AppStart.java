@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import fanx.instl.R;
 import fanx.instl.activity.InstagramUtils.InstagramSession;
@@ -26,7 +25,7 @@ public class AppStart extends AppCompatActivity {
             public void run() {
 
                 InstagramSession i = new InstagramSession(AppStart.this);
-                try {
+                try {/*
                     if (i.hasAccessToken()) {
                         //Hi Xuan not sure why this part is not working
                         //Create an Intent that will start the Main Activity.
@@ -45,7 +44,10 @@ public class AppStart extends AppCompatActivity {
                         Intent loginIntent = new Intent(AppStart.this, LoginActivity.class);
                         startActivity(loginIntent);
 
-                    }
+                    }*/
+                    Intent mainIntent = new Intent(AppStart.this, MainActivity.class);
+                    startActivity(mainIntent);
+                    finish();
                 } catch (NullPointerException ne) {
 
                 }

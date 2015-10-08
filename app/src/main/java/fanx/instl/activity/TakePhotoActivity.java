@@ -14,12 +14,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
@@ -41,7 +38,6 @@ import java.io.File;
 
 import butterknife.Bind;
 import butterknife.OnClick;
-
 import fanx.instl.R;
 import fanx.instl.activity.adapter.PhotoFiltersAdapter;
 import fanx.instl.ui.RevealBackgroundView;
@@ -73,16 +69,19 @@ public class TakePhotoActivity extends BaseActivity
     CameraView cameraView;
     @Bind(R.id.rvFilters)
     RecyclerView rvFilters;
-    @Bind(R.id.btnTakePhoto)
-    Button btnTakePhoto;
-
     private boolean pendingIntro;
     private int currentState;
 
+    @Bind(R.id.btnTakePhoto)
+    Button btnTakePhoto;
+
     private File photoPath;
     // Grid Line & Flash Light
-    private boolean isLighOn = false;
+    private boolean isLightOn = false;
     private boolean gridLineOn = false;
+
+    @Bind(R.id.camera_flashLight)
+    ImageButton camera_flashLight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +104,7 @@ public class TakePhotoActivity extends BaseActivity
         });
         // Grid line & flash light
         ImageButton gridButton = (ImageButton) findViewById(R.id.camera_grid);
+        //ImageButton flashLightButton = (ImageButton) findViewById(R.id.camera_flashLight);
         final ImageView gridLine = (ImageView) findViewById(R.id.camera_grid_line);
         gridLine.setVisibility(View.INVISIBLE);
 
@@ -124,6 +124,8 @@ public class TakePhotoActivity extends BaseActivity
                 }
             }
         });
+
+
     }
 
     public static void startCameraFromLocation(int[] startingLocation, Activity startingActivity) {
@@ -178,6 +180,7 @@ public class TakePhotoActivity extends BaseActivity
         cameraView.onPause();
     }
 
+
     @OnClick(R.id.btnTakePhoto)
     public void onTakePhotoClick() {
         btnTakePhoto.setEnabled(false);
@@ -188,6 +191,18 @@ public class TakePhotoActivity extends BaseActivity
     @OnClick(R.id.btnAccept)
     public void onAcceptClick() {
         PublishActivity.openWithPhotoUri(this, Uri.fromFile(photoPath));
+    }
+
+    @OnClick(R.id.camera_flashLight)
+    public void onSwitchFlash(){
+        if (isLightOn) {
+            cameraView.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+            Log.i("info", "torch is turn off!");
+        } else {
+            cameraView.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+            Log.i("info", "torch is turn on!");
+        }
+        isLightOn = !isLightOn;
     }
 
     private void animateShutter() {
@@ -258,8 +273,11 @@ public class TakePhotoActivity extends BaseActivity
         public Camera.Parameters adjustPreviewParameters(Camera.Parameters parameters) {
             Camera.Parameters parameters1 = super.adjustPreviewParameters(parameters);
             previewSize = parameters1.getPreviewSize();
+            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
+
             return parameters1;
         }
+
 
         @Override
         public void saveImage(PictureTransaction xact, final Bitmap bitmap) {
