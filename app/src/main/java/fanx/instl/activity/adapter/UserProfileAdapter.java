@@ -21,6 +21,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
+import fanx.instl.activity.InstagramUtils.InstagramRetrieveUserMediaTask;
 import fanx.instl.utils.Utils;
 import fanx.instl.R;
 
@@ -42,6 +43,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.context = context;
         this.cellSize = Utils.getScreenWidth(context) / 3;
         this.photos = Arrays.asList(context.getResources().getStringArray(R.array.user_photos));
+        //this.photos = InstagramRetrieveUserMediaTask.photoList;
     }
 
     @Override

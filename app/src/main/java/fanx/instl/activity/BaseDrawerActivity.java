@@ -2,6 +2,7 @@ package fanx.instl.activity;
 
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import java.io.File;
 import butterknife.Bind;
 import butterknife.OnClick;
 import fanx.instl.R;
+import fanx.instl.activity.InstagramUtils.AppData;
 import fanx.instl.activity.InstagramUtils.InstagramCurrentUserProfile;
 import fanx.instl.utils.CircleTransformation;
 
@@ -43,16 +45,10 @@ public class BaseDrawerActivity extends BaseActivity {
         injectViews();
 
         InstagramCurrentUserProfile instagramUser = new InstagramCurrentUserProfile(this,
-                full_name,
-                ivMenuUserProfilePhoto);
+                full_name);
         instagramUser.execute();
-        //injectViews();
-        /*try {
-            savePhotoToSD();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        setupHeader();*/
+
+        setupHeader();
     }
 
     @Override
@@ -80,16 +76,17 @@ public class BaseDrawerActivity extends BaseActivity {
                 // construction
                 UserProfileActivity.startUserProfileFromLocation(startingLocation, BaseDrawerActivity.this);
                 overridePendingTransition(0, 0);
+
             }
         }, 200);
     }
 
     private void setupHeader() {
         this.avatarSize = getResources().getDimensionPixelSize(R.dimen.global_menu_avatar_size);
-        this.profilePhoto = getResources().getString(R.string.user_profile_photo);
+        this.profilePhoto = InstagramCurrentUserProfile.profile_image_url;
         Picasso.with(this)
-                .load(new File("/sdcard/InstL/cache/profile.jpg"))
-                .placeholder(R.drawable.img_circle_placeholder)
+                .load(profilePhoto)
+                .placeholder(R.drawable.icon_2_n)
                 .resize(avatarSize, avatarSize)
                 .centerCrop()
                 .transform(new CircleTransformation())

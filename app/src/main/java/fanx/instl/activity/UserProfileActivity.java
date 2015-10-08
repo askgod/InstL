@@ -14,21 +14,33 @@ import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 import fanx.instl.R;
+import fanx.instl.activity.InstagramUtils.AppData;
 import fanx.instl.activity.InstagramUtils.InstagramCurrentUserProfile;
+import fanx.instl.activity.InstagramUtils.InstagramRetrieveUserMediaTask;
 import fanx.instl.activity.adapter.UserProfileAdapter;
 import fanx.instl.ui.RevealBackgroundView;
 import fanx.instl.utils.CircleTransformation;
@@ -41,7 +53,7 @@ public class UserProfileActivity extends BaseDrawerActivity implements RevealBac
 
     @Bind(R.id.vRevealBackground)
     RevealBackgroundView vRevealBackground;
-
+    // Grid Recycle View
     @Bind(R.id.rvUserProfile)
     RecyclerView rvUserProfile;
 
@@ -90,17 +102,6 @@ public class UserProfileActivity extends BaseDrawerActivity implements RevealBac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        this.avatarSize = getResources().getDimensionPixelSize(R.dimen.user_profile_avatar_size);
-        this.profilePhoto = getString(R.string.user_profile_photo);
-/*
-        Picasso.with(this)
-                .load(profilePhoto)
-                .placeholder(R.drawable.img_circle_placeholder)
-                .resize(avatarSize, avatarSize)
-                .centerCrop()
-                .transform(new CircleTransformation())
-                .into(ivUserProfilePhoto);
-*/
         // NEW
         InstagramCurrentUserProfile instagramUser = new InstagramCurrentUserProfile(this,
                 profile_fullname,
@@ -112,11 +113,13 @@ public class UserProfileActivity extends BaseDrawerActivity implements RevealBac
                 profile_followed_byCounts,
                 ivUserProfilePhoto);
         instagramUser.execute();
-        //
 
         setupTabs();
         setupUserProfileGrid();
         setupRevealBackground(savedInstanceState);
+        //
+        setRoundImage();
+        //
     }
 
     private void setupTabs() {
@@ -135,6 +138,7 @@ public class UserProfileActivity extends BaseDrawerActivity implements RevealBac
                 userPhotosAdapter.setLockedAnimations(true);
             }
         });
+
     }
 
     private void setupRevealBackground(Bundle savedInstanceState) {
@@ -189,50 +193,28 @@ public class UserProfileActivity extends BaseDrawerActivity implements RevealBac
            vUserStats.animate().alpha(1).setDuration(200).setStartDelay(400).setInterpolator(INTERPOLATOR).start();
     }
 // NEW
-    public static Bitmap convertViewToBitmap(View view)
-    {
-        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
-        view.buildDrawingCache();
-        Bitmap bitmap = view.getDrawingCache();
 
-        return bitmap;
+    @OnClick(R.id.btnFollow)
+    public void btnFollow(View view) {
+
+        String profileURL = "https://api.instagram.com/v1" + "/users/"
+                + AppData.getUserId(getApplicationContext())
+                + "/?access_token="
+                + AppData.getAccessToken(getApplicationContext());
+
+        Log.v("test", profileURL);
+
     }
-    public void savePhotoToSD () throws IOException {
+    public void setRoundImage () {
+        this.avatarSize = getResources().getDimensionPixelSize(R.dimen.user_profile_avatar_size);
+        this.profilePhoto = InstagramCurrentUserProfile.profile_image_url;
 
-        Bitmap bitmap = convertViewToBitmap(ivUserProfilePhoto);
-        String strPath = getSDPath();
-
-        try {
-            File destDir = new File(strPath);
-            if (!destDir.exists()) {
-                Log.d("MagicMirror", "Dir not exist create it " + strPath);
-                destDir.mkdirs();
-                Log.d("MagicMirror", "Make dir success: " + strPath);
-            }
-
-            String strFileName = "profile_image";
-            File imageFile = new File(strPath + "/" + strFileName);
-            imageFile.createNewFile();
-            FileOutputStream fos = new FileOutputStream(imageFile);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
-            fos.flush();
-            fos.close();
-        }
-        catch (FileNotFoundException e){
-            e.printStackTrace();
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-    public static String getSDPath() {
-        boolean hasSDCard = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
-        if(hasSDCard) {
-            return Environment.getExternalStorageDirectory().toString() + "/instL/cache";
-        }
-        else
-            return "/data/data/instL/cache";
+        Picasso.with(this)
+                .load(profilePhoto)
+                .placeholder(R.drawable.img_circle_placeholder)
+                .resize(avatarSize, avatarSize)
+                .centerCrop()
+                .transform(new CircleTransformation())
+                .into(ivUserProfilePhoto);
     }
 }

@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -41,6 +42,10 @@ public class InstagramCurrentUserProfile extends AsyncTask <Void, Void, JSONObje
     TextView textView_followed_byCounts;
     ImageView imageView_profile_picture;
     Context context_userProfileActivity;
+
+    // Profile picture URL - Fan
+    public static String profile_image_url = null;
+
 
     public InstagramCurrentUserProfile(Context context_userProfileActivity,
                                        TextView textView_full_name,
@@ -66,14 +71,31 @@ public class InstagramCurrentUserProfile extends AsyncTask <Void, Void, JSONObje
     // Second constructor for drawer view by FanX
 
     public InstagramCurrentUserProfile(Context context_userProfileActivity,
-                                       TextView textView_full_name,
-                                       ImageView imageView_profile_picture) {
+                                       TextView textView_full_name) {
 
         this.textView_full_name = textView_full_name;
-        this.imageView_profile_picture = imageView_profile_picture;
         this.context_userProfileActivity = context_userProfileActivity;
     }
 
+    public InstagramCurrentUserProfile(Context context_userProfileActivity,
+                                       TextView textView_full_name,
+                                       TextView textview_username,
+                                       TextView textview_bio,
+                                       TextView textView_website,
+                                       TextView textView_mediaCounts,
+                                       TextView textView_followsCounts,
+                                       TextView textView_followed_byCounts)
+    {
+        this.textView_full_name = textView_full_name;
+        this.textview_username = textview_username;
+        this.textview_bio = textview_bio;
+        this.textView_website = textView_website;
+        this.textView_mediaCounts = textView_mediaCounts;
+        this.textView_followsCounts = textView_followsCounts;
+        this.textView_followed_byCounts = textView_followed_byCounts;
+        this.context_userProfileActivity = context_userProfileActivity;
+
+    }
 
     protected JSONObject doInBackground(Void... params) {
 
@@ -92,6 +114,10 @@ public class InstagramCurrentUserProfile extends AsyncTask <Void, Void, JSONObje
                     JSONObject jsonObj = (JSONObject) new JSONTokener(response).nextValue();
                     JSONObject result = jsonObj.getJSONObject("data");
                     urlConnection.disconnect();
+
+                    // Extract string URL of profile picture - by Fan
+                    profile_image_url = result.getString("profile_picture");
+                    Log.v("profile_image_url ", result.getString("profile_picture"));
 
                     return result;
 
@@ -112,8 +138,8 @@ public class InstagramCurrentUserProfile extends AsyncTask <Void, Void, JSONObje
 
             JSONObject counts = result.getJSONObject("counts");
             textView_mediaCounts.setText(counts.getString("media"));
-            textView_mediaCounts.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
-            textView_mediaCounts.setTextColor(Color.parseColor("#0000ff"));
+            //textView_mediaCounts.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+            textView_mediaCounts.setTextColor(Color.parseColor("#ffffff"));
             textView_mediaCounts.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
