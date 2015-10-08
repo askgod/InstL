@@ -39,6 +39,7 @@
                     android:layout_weight="1" />
 
                 <ImageButton
+                    android:id="@+id/camera_grid"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginLeft="24dp"
@@ -46,11 +47,12 @@
                     android:src="@drawable/ic_grid_on_white_24dp" />
 
                 <ImageButton
+                    android:id="@+id/camera_flashLight"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginLeft="24dp"
                     android:background="@drawable/btn_default_light"
-                    android:src="@drawable/ic_camera_rear_white_24dp" />
+                    android:src="@drawable/ic_flash_light" />
             </LinearLayout>
 
             <LinearLayout
@@ -118,6 +120,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical" />
+
+            <ImageView
+                android:id="@+id/camera_grid_line"
+                android:background="@drawable/grid"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                />
 
             <ImageButton
                 android:id="@+id/ivTakenPhoto"

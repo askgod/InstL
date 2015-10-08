@@ -26,7 +26,9 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.commonsware.cwac.camera.CameraHost;
@@ -78,6 +80,9 @@ public class TakePhotoActivity extends BaseActivity
     private int currentState;
 
     private File photoPath;
+    // Grid Line & Flash Light
+    private boolean isLighOn = false;
+    private boolean gridLineOn = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +101,27 @@ public class TakePhotoActivity extends BaseActivity
                 vUpperPanel.setTranslationY(-vUpperPanel.getHeight());
                 vLowerPanel.setTranslationY(vLowerPanel.getHeight());
                 return true;
+            }
+        });
+        // Grid line & flash light
+        ImageButton gridButton = (ImageButton) findViewById(R.id.camera_grid);
+        final ImageView gridLine = (ImageView) findViewById(R.id.camera_grid_line);
+        gridLine.setVisibility(View.INVISIBLE);
+
+        gridButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (gridLineOn == false) {
+                    Toast.makeText(getApplicationContext(), "Grid line Enabled",
+                            Toast.LENGTH_SHORT).show();
+                    gridLine.setVisibility(View.VISIBLE);
+                    gridLineOn = true;
+                } else if (gridLineOn == true) {
+                    Toast.makeText(getApplicationContext(), "Grid line Disabled",
+                            Toast.LENGTH_SHORT).show();
+                    gridLine.setVisibility(View.INVISIBLE);
+                    gridLineOn = false;
+                }
             }
         });
     }
