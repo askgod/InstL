@@ -43,8 +43,8 @@
                 android:background="@drawable/switch_publish_followers"
                 android:checked="true"
                 android:textColor="#ffffff"
-                android:textOff="FOLLOWERS"
-                android:textOn="FOLLOWERS" />
+                android:textOff="Instagram"
+                android:textOn="INSTAGRAM" />
 
             <ToggleButton
                 android:id="@+id/tbDirect"
@@ -55,8 +55,8 @@
                 android:layout_weight="1"
                 android:background="@drawable/switch_publish_direct"
                 android:textColor="#ffffff"
-                android:textOff="DIRECT"
-                android:textOn="DIRECT" />
+                android:textOff="Via Bluetooth"
+                android:textOn="Bluetooth" />
         </LinearLayout>
 
         <android.support.v7.widget.CardView

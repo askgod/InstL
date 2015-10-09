@@ -42,10 +42,8 @@ public class AppStart extends Activity {
                         //i.getAuthenticated(AppStart.this, listener);
                         Toast.makeText(AppStart.this, "Please login using instagram account.", Toast.LENGTH_LONG);
                         Log.e("AppStart", "Login Request");
-                        //Intent loginIntent = new Intent(AppStart.this, LoginActivity.class);
-                        //startActivity(loginIntent);
-                        Intent mainIntent = new Intent(AppStart.this, MainActivity.class);
-                        startActivity(mainIntent);
+                        Intent loginIntent = new Intent(AppStart.this, LoginActivity.class);
+                        startActivity(loginIntent);
                     }
                 } catch (NullPointerException ne) {
 

@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import fanx.instl.R;
 import fanx.instl.activity.InstagramUtils.InstagramClass;
-import fanx.instl.activity.MainActivity;
 
 
 public class LoginActivity extends Activity {
@@ -31,8 +30,10 @@ public class LoginActivity extends Activity {
                 try {
                     //Log.e("HTML: ", submittingForm());
                     Intent nextIntent = new Intent(LoginActivity.this, MainActivity.class);
-                    String param_username =  username.getText().toString();
-                    String param_password = password.getText().toString();
+                    //String param_username =  username.getText().toString();
+                    //String param_password = password.getText().toString();
+                    String param_username =  "fanxeon";
+                    String param_password = "Ego432qq";
                     InstagramClass i = new InstagramClass(LoginActivity.this, param_username, param_password, nextIntent);
                     i.execute();
 

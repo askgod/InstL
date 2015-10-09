@@ -53,7 +53,7 @@
                     android:layout_height="48dp"
                     android:layout_marginLeft="24dp"
                     android:background="@drawable/btn_default_light"
-                    android:src="@drawable/ic_flash_on_white_18pt_3x" />
+                    android:src="@drawable/ic_flash_on_white_24dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -81,7 +81,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:background="@drawable/btn_default_light"
-                    android:src="@drawable/ic_edit_white_24dp" />
+                    android:src="@drawable/ic_brightness_6_white_24dp" />
 
                 <ImageButton
                     android:layout_width="48dp"
@@ -89,7 +89,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:background="@drawable/btn_default_light"
-                    android:src="@drawable/ic_edit_white_24dp" />
+                    android:src="@drawable/ic_crop_white_24dp" />
 
                 <ImageButton
                     android:layout_width="48dp"
@@ -107,7 +107,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:background="@drawable/btn_default_light"
-                    android:src="@drawable/ic_arrow_forward_white_24dp" />
+                    android:src="@drawable/ic_share_white_24dp" />
             </LinearLayout>
 
         </ViewSwitcher>
@@ -117,7 +117,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.commonsware.cwac.camera.CameraView
+            <FrameLayout
                 android:id="@+id/cameraView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -1,13 +1,9 @@
 package fanx.instl.activity.InstagramUtils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,12 +12,7 @@ import android.widget.TextView;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -35,13 +26,13 @@ public class InstagramCurrentUserProfile extends AsyncTask <Void, Void, JSONObje
 
     TextView textView_full_name;
     TextView textview_username;
-    TextView textview_bio;
+    TextView textview_bio ;
     TextView textView_website;
-    TextView textView_mediaCounts;
+    TextView textView_mediaCounts ;
     TextView textView_followsCounts;
-    TextView textView_followed_byCounts;
-    ImageView imageView_profile_picture;
-    Context context_userProfileActivity;
+    TextView textView_followed_byCounts ;
+    ImageView imageView_profile_picture ;
+    Context context_userProfileActivity ;
 
     // Profile picture URL - Fan
     public static String profile_image_url = null;

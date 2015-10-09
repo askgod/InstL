@@ -6,15 +6,19 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -23,27 +27,23 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-import com.commonsware.cwac.camera.CameraHost;
-import com.commonsware.cwac.camera.CameraHostProvider;
-import com.commonsware.cwac.camera.CameraView;
-import com.commonsware.cwac.camera.PictureTransaction;
-import com.commonsware.cwac.camera.SimpleCameraHost;
-
 import java.io.File;
+import java.io.FileOutputStream;
 
 import butterknife.Bind;
 import butterknife.OnClick;
 import fanx.instl.R;
 import fanx.instl.ui.RevealBackgroundView;
+import fanx.instl.utils.CameraPreview;
 import fanx.instl.utils.Utils;
 
 public class TakePhotoActivity extends BaseActivity
-        implements RevealBackgroundView.OnStateChangeListener , CameraHostProvider {
+        implements RevealBackgroundView.OnStateChangeListener {
 
     public static final String ARG_REVEAL_START_LOCATION = "reveal_start_location";
 
@@ -51,21 +51,30 @@ public class TakePhotoActivity extends BaseActivity
     private static final Interpolator DECELERATE_INTERPOLATOR = new DecelerateInterpolator();
     private static final int STATE_TAKE_PHOTO = 0;
     private static final int STATE_SETUP_PHOTO = 1;
+    protected static final String TAG = "main";
+
+    static String lastFilePath = null;
 
     @Bind(R.id.vRevealBackground)
     RevealBackgroundView vRevealBackground;
+
     @Bind(R.id.vPhotoRoot)
     View vTakePhotoRoot;
+
     @Bind(R.id.vShutter)
     View vShutter;
+
     @Bind(R.id.ivTakenPhoto)
     ImageView ivTakenPhoto;
+
     @Bind(R.id.vUpperPanel)
     ViewSwitcher vUpperPanel;
+
     @Bind(R.id.vLowerPanel)
     ViewSwitcher vLowerPanel;
-    @Bind(R.id.cameraView)
-    CameraView cameraView;
+
+    //@Bind(R.id.cameraView)
+    //View cameraView;
     //@Bind(R.id.rvFilters)
     //RecyclerView rvFilters;
     private boolean pendingIntro;
@@ -75,12 +84,16 @@ public class TakePhotoActivity extends BaseActivity
     Button btnTakePhoto;
 
     private File photoPath;
+
     // Grid Line & Flash Light
     private boolean isLightOn = false;
     private boolean gridLineOn = false;
 
     @Bind(R.id.camera_flashLight)
     ImageButton camera_flashLight;
+
+    @Bind(R.id.camera_grid)
+    ImageButton camera_grid;
 
     @Bind(R.id.camera_cancel)
     ImageButton camera_cancel;
@@ -101,7 +114,14 @@ public class TakePhotoActivity extends BaseActivity
     @Bind(R.id.camera_remove_filter)
     ImageButton camera_remove_filter;
 
-    //Drawable myDrawable = ivTakenPhoto.getDrawable();
+    @Bind(R.id.camera_grid_line)
+    ImageView camera_grid_line;
+
+    private Camera mCamera;
+    private CameraPreview mPreview;
+    //private CameraPreview mPreview;
+
+    Bitmap photoBitMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +131,8 @@ public class TakePhotoActivity extends BaseActivity
         updateState(STATE_TAKE_PHOTO);
         setupRevealBackground(savedInstanceState);
         setupPhotoFilters();
+        camera_grid_line.setVisibility(View.INVISIBLE);
+        //
 
         vUpperPanel.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
@@ -122,63 +144,39 @@ public class TakePhotoActivity extends BaseActivity
                 return true;
             }
         });
-        // Grid line & flash light
-        ImageButton gridButton = (ImageButton) findViewById(R.id.camera_grid);
-        //ImageButton flashLightButton = (ImageButton) findViewById(R.id.camera_flashLight);
-        final ImageView gridLine = (ImageView) findViewById(R.id.camera_grid_line);
-        gridLine.setVisibility(View.INVISIBLE);
+        // Camera
+        mCamera = getCameraInstance();
+        mCamera.setDisplayOrientation(90);
+        Camera.Parameters params = mCamera.getParameters();
+        params.setRotation(90);
+        mCamera.setParameters(params);
+        mCamera.startPreview();
+        // Create a preview class
+        mPreview = new CameraPreview(this, mCamera);
+        FrameLayout preview = (FrameLayout) findViewById(R.id.cameraView);
+        preview.addView(mPreview);
 
-        gridButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (gridLineOn == false) {
-                    Toast.makeText(getApplicationContext(), "Grid line Enabled",
-                            Toast.LENGTH_SHORT).show();
-                    gridLine.setVisibility(View.VISIBLE);
-                    gridLineOn = true;
-                } else if (gridLineOn == true) {
-                    Toast.makeText(getApplicationContext(), "Grid line Disabled",
-                            Toast.LENGTH_SHORT).show();
-                    gridLine.setVisibility(View.INVISIBLE);
-                    gridLineOn = false;
-                }
-            }
-        });
-
-        // Filter
 
     }
 
-    public static void startCameraFromLocation(int[] startingLocation, Activity startingActivity) {
-        Intent intent = new Intent(startingActivity, TakePhotoActivity.class);
-        intent.putExtra(ARG_REVEAL_START_LOCATION, startingLocation);
-        startingActivity.startActivity(intent);
-    }
+    //Open Camera //
+    public Camera getCameraInstance() {
+        Camera c = null;
 
+        try {
+            c = Camera.open();
+            updateState(STATE_TAKE_PHOTO);
+        } catch (Exception e) {
+            Log.d(TAG, "Fail to open camera");
+        }
+        return c;
+    }
 
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void updateStatusBarColor() {
         if (Utils.isAndroid5()) {
             getWindow().setStatusBarColor(0xff111111);
-        }
-    }
-
-    private void setupRevealBackground(Bundle savedInstanceState) {
-        vRevealBackground.setFillPaintColor(0xFF16181a);
-        vRevealBackground.setOnStateChangeListener(this);
-        if (savedInstanceState == null) {
-            final int[] startingLocation = getIntent().getIntArrayExtra(ARG_REVEAL_START_LOCATION);
-            vRevealBackground.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    vRevealBackground.getViewTreeObserver().removeOnPreDrawListener(this);
-                    vRevealBackground.startFromLocation(startingLocation);
-                    return true;
-                }
-            });
-        } else {
-            vRevealBackground.setToFinishedFrame();
         }
     }
 
@@ -192,38 +190,94 @@ public class TakePhotoActivity extends BaseActivity
     @Override
     protected void onResume() {
         super.onResume();
-        cameraView.onResume();
+
     }
 
     @Override
-    protected void onPause() {
+    protected void onDestroy() {
+        // Release Camera
+        if(mCamera!=null){
+            mCamera.release();
+            mCamera=null;
+        }
+        super.onDestroy();
+    }
+    public void onPause() {
         super.onPause();
-        cameraView.onPause();
+        mCamera.setPreviewCallback(null);
+        mCamera.stopPreview();
+        mCamera.release();
+        mCamera = null;
     }
 
     // Inject bind views functions
     @OnClick(R.id.btnTakePhoto)
     public void onTakePhotoClick() {
         btnTakePhoto.setEnabled(false);
-        cameraView.takePicture(true, true);
+        mCamera.autoFocus(new Camera.AutoFocusCallback() {
+            @Override
+            public void onAutoFocus(boolean success, Camera camera) {
+                // Capture from camera
+                mCamera.takePicture(null, null, mPicture);
+                vUpperPanel.showNext();
+                vLowerPanel.showNext();
+                updateState(STATE_SETUP_PHOTO);
+            }
+        });
+
         animateShutter();
+
     }
+
+    public static Bitmap convertViewToBitmap(View view)
+    {
+        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.buildDrawingCache();
+        Bitmap bitmap = view.getDrawingCache();
+
+        return bitmap;
+    }
+
 
     @OnClick(R.id.btnAccept)
     public void onAcceptClick() {
+        saveImage();
+        Log.i("info", String.valueOf(photoPath));
         PublishActivity.openWithPhotoUri(this, Uri.fromFile(photoPath));
+        finish();
+    }
+
+    @OnClick(R.id.camera_grid)
+    public void onSwitchGridLine() {
+        if (gridLineOn == false) {
+            Log.i("info", "Gridline is turn off!");
+            camera_grid_line.setVisibility(View.VISIBLE);
+            gridLineOn = true;
+        } else if (gridLineOn == true) {
+            Log.i("info", "Gridline is turn off!");
+            camera_grid_line.setVisibility(View.INVISIBLE);
+            gridLineOn = false;
+        }
     }
 
     @OnClick(R.id.camera_flashLight)
     public void onSwitchFlash(){
+        Camera.Parameters cameraParameter = mCamera.getParameters();
         if (isLightOn) {
-            cameraView.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
             Log.i("info", "torch is turn off!");
+            cameraParameter.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+            mCamera.setParameters(cameraParameter);
+            mCamera.startPreview();
+            isLightOn = false;
         } else {
-            cameraView.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
             Log.i("info", "torch is turn on!");
+            cameraParameter.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+            mCamera.setParameters(cameraParameter);
+            mCamera.startPreview();
+            isLightOn = true;
         }
-        isLightOn = !isLightOn;
     }
 
     @OnClick(R.id.camera_cancel)
@@ -231,30 +285,60 @@ public class TakePhotoActivity extends BaseActivity
         Log.i("info", "Camera activity cancelled!");
         finish();
     }
+    // Callback from camera
+    private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
+        @Override
+        public void onPictureTaken(byte[] data, Camera camera) {
+            /*BitmapFactory.Options opts = new BitmapFactory.Options();
+            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            ivTakenPhoto.setImageBitmap(bitmap);
+            // Save jpg to sd
+            String root = Environment.getExternalStorageDirectory().toString();
+            Log.d(TAG, root);
+            File pictureFile = new File(root + "/InstL/1st" + System.currentTimeMillis()
+                    + ".jpg");
+            try {
+                FileOutputStream fos = new FileOutputStream(pictureFile);
+                fos.write(data);
+                fos.close();
+            } catch (Exception e) {
+                Log.d(TAG, "Fail to save picture");
+            }*/
+            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            ivTakenPhoto.setImageBitmap(bitmap);
+            //saveImage();
+            //showTakenPicture(bitmap);
 
-    // Animations
-    private void animateShutter() {
-        vShutter.setVisibility(View.VISIBLE);
-        vShutter.setAlpha(0.f);
+        }
+    };
 
-        ObjectAnimator alphaInAnim = ObjectAnimator.ofFloat(vShutter, "alpha", 0f, 0.8f);
-        alphaInAnim.setDuration(100);
-        alphaInAnim.setStartDelay(100);
-        alphaInAnim.setInterpolator(ACCELERATE_INTERPOLATOR);
-
-        ObjectAnimator alphaOutAnim = ObjectAnimator.ofFloat(vShutter, "alpha", 0.8f, 0f);
-        alphaOutAnim.setDuration(200);
-        alphaOutAnim.setInterpolator(DECELERATE_INTERPOLATOR);
-
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playSequentially(alphaInAnim, alphaOutAnim);
-        animatorSet.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                vShutter.setVisibility(View.GONE);
+    private void saveImage(){
+        String filename = String.valueOf(System.currentTimeMillis());
+        Bitmap bitmap = loadBitmapFromView(ivTakenPhoto);
+        String fullPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/InstL/";
+        File file = new File(fullPath + filename + ".jpg");
+        File dir = new File(fullPath);
+        try {
+            if (!dir.exists()) {
+                dir.mkdirs();
             }
-        });
-        animatorSet.start();
+            if (file.exists()) {
+                file.delete();
+            }
+
+            FileOutputStream out = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 80, out);
+            // End
+            out.flush();
+            out.close();
+
+        }
+        catch (Exception e) {
+            Log.e("saveToExternalStorage()", e.getMessage());
+        }
+        photoPath = dir;
+        lastFilePath = String.valueOf(file);
+        Log.v(TAG, lastFilePath);
     }
 
     @Override
@@ -269,64 +353,10 @@ public class TakePhotoActivity extends BaseActivity
         }
     }
 
-    private void startIntroAnimation() {
-        vUpperPanel.animate().translationY(0).setDuration(400).setInterpolator(DECELERATE_INTERPOLATOR);
-        vLowerPanel.animate().translationY(0).setDuration(400).setInterpolator(DECELERATE_INTERPOLATOR).start();
-    }
-
-    @Override
-    public CameraHost getCameraHost() {
-        return new MyCameraHost(this);
-    }
-
-    class MyCameraHost extends SimpleCameraHost {
-
-        private Camera.Size previewSize;
-
-        public MyCameraHost(Context ctxt) {
-            super(ctxt);
-        }
-
-        @Override
-        public boolean useFullBleedPreview() {
-            return true;
-        }
-
-        @Override
-        public Camera.Size getPictureSize(PictureTransaction xact, Camera.Parameters parameters) {
-            return previewSize;
-        }
-
-        @Override
-        public Camera.Parameters adjustPreviewParameters(Camera.Parameters parameters) {
-            Camera.Parameters parameters1 = super.adjustPreviewParameters(parameters);
-            previewSize = parameters1.getPreviewSize();
-            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
-
-            return parameters1;
-        }
-
-
-        @Override
-        public void saveImage(PictureTransaction xact, final Bitmap bitmap) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    showTakenPicture(bitmap);
-                }
-            });
-        }
-
-        @Override
-        public void saveImage(PictureTransaction xact, byte[] image) {
-            super.saveImage(xact, image);
-            photoPath = getPhotoPath();
-        }
-    }
 
     private void showTakenPicture(Bitmap bitmap) {
-        vUpperPanel.showNext();
-        vLowerPanel.showNext();
+        //vUpperPanel.showNext();
+        //vLowerPanel.showNext();
         ivTakenPhoto.setImageBitmap(bitmap);
         updateState(STATE_SETUP_PHOTO);
     }
@@ -364,6 +394,18 @@ public class TakePhotoActivity extends BaseActivity
             ivTakenPhoto.setVisibility(View.VISIBLE);
         }
     }
+
+    private Bitmap loadBitmapFromView(View v) {
+        final int w = v.getWidth();
+        final int h = v.getHeight();
+        final Bitmap b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        final Canvas c = new Canvas(b);
+        //v.layout(0, 0, w, h);
+        v.layout(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+        v.draw(c);
+        return b;
+    }
+
     // Filters
     @OnClick (R.id.camera_filter1)
     public void add_filter1(){
@@ -389,20 +431,81 @@ public class TakePhotoActivity extends BaseActivity
         ivTakenPhoto.setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.LIGHTEN);
     }
 
-
     /*
     private int getImageResource(ImageView iv) {
         return (Integer) iv.getTag();
     }
 
-
+*/
     @OnClick (R.id.camera_filter4)
     public void cool_filter(){
         Log.i("info", "Filters change cool");
         Drawable[] layers = new Drawable[2];
-        layers[0] = myDrawable;
+        //layers[0] = myDrawable;
         layers[1] = getResources().getDrawable(R.drawable.filter1);
         LayerDrawable layerDrawable = new LayerDrawable(layers);
         ivTakenPhoto.setImageDrawable(layerDrawable);
-    }*/
+        // TODO
+    }
+
+    // Animations
+
+    private void startIntroAnimation() {
+        vUpperPanel.animate().translationY(0)
+                .setDuration(400)
+                .setInterpolator(DECELERATE_INTERPOLATOR);
+        vLowerPanel.animate()
+                .translationY(0)
+                .setDuration(400)
+                .setInterpolator(DECELERATE_INTERPOLATOR).start();
+    }
+
+    private void animateShutter() {
+        vShutter.setVisibility(View.VISIBLE);
+        vShutter.setAlpha(0.f);
+
+        ObjectAnimator alphaInAnim = ObjectAnimator.ofFloat(vShutter, "alpha", 0f, 0.8f);
+        alphaInAnim.setDuration(100);
+        alphaInAnim.setStartDelay(100);
+        alphaInAnim.setInterpolator(ACCELERATE_INTERPOLATOR);
+
+        ObjectAnimator alphaOutAnim = ObjectAnimator.ofFloat(vShutter, "alpha", 0.8f, 0f);
+        alphaOutAnim.setDuration(200);
+        alphaOutAnim.setInterpolator(DECELERATE_INTERPOLATOR);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playSequentially(alphaInAnim, alphaOutAnim);
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                vShutter.setVisibility(View.GONE);
+            }
+        });
+        animatorSet.start();
+    }
+
+    private void setupRevealBackground(Bundle savedInstanceState) {
+        vRevealBackground.setFillPaintColor(0xFF16181a);
+        vRevealBackground.setOnStateChangeListener(this);
+        if (savedInstanceState == null) {
+            final int[] startingLocation = getIntent().getIntArrayExtra(ARG_REVEAL_START_LOCATION);
+            vRevealBackground.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    vRevealBackground.getViewTreeObserver().removeOnPreDrawListener(this);
+                    vRevealBackground.startFromLocation(startingLocation);
+                    return true;
+                }
+            });
+        } else {
+            vRevealBackground.setToFinishedFrame();
+        }
+    }
+
+
+    public static void startCameraFromLocation(int[] startingLocation, Activity startingActivity) {
+        Intent intent = new Intent(startingActivity, TakePhotoActivity.class);
+        intent.putExtra(ARG_REVEAL_START_LOCATION, startingLocation);
+        startingActivity.startActivity(intent);
+    }
 }

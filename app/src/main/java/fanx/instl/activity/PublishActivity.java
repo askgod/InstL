@@ -20,9 +20,6 @@ import butterknife.Bind;
 import butterknife.OnCheckedChanged;
 import fanx.instl.R;
 import fanx.instl.utils.Utils;
-import fanx.instl.activity.BaseActivity;
-import hugo.weaving.DebugLog;
-import timber.log.Timber;
 
 
 public class PublishActivity extends BaseActivity {
@@ -144,6 +141,13 @@ public class PublishActivity extends BaseActivity {
             propagatingToggleState = true;
             tbFollowers.setChecked(!checked);
             propagatingToggleState = false;
+            // Save to Local
+
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }
