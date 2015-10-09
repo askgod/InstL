@@ -12,7 +12,7 @@ import fanx.instl.R;
 public class PhotoFiltersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private int itemsCount = 12;
+    private int itemsCount = 4;
 
     public PhotoFiltersAdapter(Context context) {
         this.context = context;

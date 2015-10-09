@@ -9,13 +9,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -39,7 +39,6 @@ import java.io.File;
 import butterknife.Bind;
 import butterknife.OnClick;
 import fanx.instl.R;
-import fanx.instl.activity.adapter.PhotoFiltersAdapter;
 import fanx.instl.ui.RevealBackgroundView;
 import fanx.instl.utils.Utils;
 
@@ -67,8 +66,8 @@ public class TakePhotoActivity extends BaseActivity
     ViewSwitcher vLowerPanel;
     @Bind(R.id.cameraView)
     CameraView cameraView;
-    @Bind(R.id.rvFilters)
-    RecyclerView rvFilters;
+    //@Bind(R.id.rvFilters)
+    //RecyclerView rvFilters;
     private boolean pendingIntro;
     private int currentState;
 
@@ -82,6 +81,27 @@ public class TakePhotoActivity extends BaseActivity
 
     @Bind(R.id.camera_flashLight)
     ImageButton camera_flashLight;
+
+    @Bind(R.id.camera_cancel)
+    ImageButton camera_cancel;
+
+    @Bind(R.id.camera_filter1)
+    ImageButton camera_filter1;
+
+    @Bind(R.id.camera_filter2)
+    ImageButton camera_filter2;
+
+    @Bind(R.id.camera_filter3)
+    ImageButton camera_filter3;
+
+
+    @Bind(R.id.camera_filter4)
+    ImageButton camera_filter4;
+
+    @Bind(R.id.camera_remove_filter)
+    ImageButton camera_remove_filter;
+
+    //Drawable myDrawable = ivTakenPhoto.getDrawable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +145,7 @@ public class TakePhotoActivity extends BaseActivity
             }
         });
 
+        // Filter
 
     }
 
@@ -162,10 +183,10 @@ public class TakePhotoActivity extends BaseActivity
     }
 
     private void setupPhotoFilters() {
-        PhotoFiltersAdapter photoFiltersAdapter = new PhotoFiltersAdapter(this);
-        rvFilters.setHasFixedSize(true);
-        rvFilters.setAdapter(photoFiltersAdapter);
-        rvFilters.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        //PhotoFiltersAdapter photoFiltersAdapter = new PhotoFiltersAdapter(this);
+        //rvFilters.setHasFixedSize(true);
+        //rvFilters.setAdapter(photoFiltersAdapter);
+        //camera_filter1.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
 
     @Override
@@ -180,7 +201,7 @@ public class TakePhotoActivity extends BaseActivity
         cameraView.onPause();
     }
 
-
+    // Inject bind views functions
     @OnClick(R.id.btnTakePhoto)
     public void onTakePhotoClick() {
         btnTakePhoto.setEnabled(false);
@@ -205,6 +226,13 @@ public class TakePhotoActivity extends BaseActivity
         isLightOn = !isLightOn;
     }
 
+    @OnClick(R.id.camera_cancel)
+    public void camera_cancel (){
+        Log.i("info", "Camera activity cancelled!");
+        finish();
+    }
+
+    // Animations
     private void animateShutter() {
         vShutter.setVisibility(View.VISIBLE);
         vShutter.setAlpha(0.f);
@@ -336,5 +364,45 @@ public class TakePhotoActivity extends BaseActivity
             ivTakenPhoto.setVisibility(View.VISIBLE);
         }
     }
+    // Filters
+    @OnClick (R.id.camera_filter1)
+    public void add_filter1(){
+        Log.i("info", "Filters change red");
+        ivTakenPhoto.setColorFilter(Color.RED, PorterDuff.Mode.LIGHTEN);
+    }
 
+    @OnClick (R.id.camera_filter2)
+    public void add_filter2(){
+        Log.i("info", "Filters change red");
+        ivTakenPhoto.setColorFilter(Color.BLUE, PorterDuff.Mode.LIGHTEN);
+    }
+
+    @OnClick (R.id.camera_filter3)
+    public void add_filter3(){
+        Log.i("info", "Filters change red");
+        ivTakenPhoto.setColorFilter(Color.YELLOW, PorterDuff.Mode.LIGHTEN);
+    }
+
+    @OnClick (R.id.camera_remove_filter)
+    public void remove_filter(){
+        Log.i("info", "Filters change red");
+        ivTakenPhoto.setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.LIGHTEN);
+    }
+
+
+    /*
+    private int getImageResource(ImageView iv) {
+        return (Integer) iv.getTag();
+    }
+
+
+    @OnClick (R.id.camera_filter4)
+    public void cool_filter(){
+        Log.i("info", "Filters change cool");
+        Drawable[] layers = new Drawable[2];
+        layers[0] = myDrawable;
+        layers[1] = getResources().getDrawable(R.drawable.filter1);
+        LayerDrawable layerDrawable = new LayerDrawable(layers);
+        ivTakenPhoto.setImageDrawable(layerDrawable);
+    }*/
 }

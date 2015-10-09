@@ -23,4 +23,6 @@
     <color name="text_like_counter">#2b5a83</color>
 
     <color name="bg_comments">#ffffff</color>
+    <!-- filters -->
+    <color name="highlight_color_filter">#A5FF0000</color>
 </resources>
