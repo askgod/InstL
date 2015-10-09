@@ -68,25 +68,6 @@ public class InstagramCurrentUserProfile extends AsyncTask <Void, Void, JSONObje
         this.context_userProfileActivity = context_userProfileActivity;
     }
 
-    public InstagramCurrentUserProfile(Context context_userProfileActivity,
-                                       TextView textView_full_name,
-                                       TextView textview_username,
-                                       TextView textview_bio,
-                                       TextView textView_website,
-                                       TextView textView_mediaCounts,
-                                       TextView textView_followsCounts,
-                                       TextView textView_followed_byCounts)
-    {
-        this.textView_full_name = textView_full_name;
-        this.textview_username = textview_username;
-        this.textview_bio = textview_bio;
-        this.textView_website = textView_website;
-        this.textView_mediaCounts = textView_mediaCounts;
-        this.textView_followsCounts = textView_followsCounts;
-        this.textView_followed_byCounts = textView_followed_byCounts;
-        this.context_userProfileActivity = context_userProfileActivity;
-
-    }
 
     protected JSONObject doInBackground(Void... params) {
 
@@ -134,6 +115,7 @@ public class InstagramCurrentUserProfile extends AsyncTask <Void, Void, JSONObje
             textView_mediaCounts.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // TODO no using yet
                     //Intent i = new Intent(context_userProfileActivity, DisplayUserPhotoActivity.class);
                     //context_userProfileActivity.startActivity(i);
                 }

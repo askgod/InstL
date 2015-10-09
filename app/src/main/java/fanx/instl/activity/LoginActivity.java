@@ -15,7 +15,6 @@ import fanx.instl.activity.InstagramUtils.InstagramClass;
 
 
 public class LoginActivity extends Activity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,10 +29,8 @@ public class LoginActivity extends Activity {
                 try {
                     //Log.e("HTML: ", submittingForm());
                     Intent nextIntent = new Intent(LoginActivity.this, MainActivity.class);
-                    //String param_username =  username.getText().toString();
-                    //String param_password = password.getText().toString();
-                    String param_username =  "fanxeon";
-                    String param_password = "Ego432qq";
+                    String param_username =  username.getText().toString();
+                    String param_password = password.getText().toString();
                     InstagramClass i = new InstagramClass(LoginActivity.this, param_username, param_password, nextIntent);
                     i.execute();
 
