@@ -1,13 +1,13 @@
 package fanx.instl.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -30,6 +30,10 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     RecyclerView rvFeed;
     @Bind(R.id.fab)
     FloatingActionButton fabCreate;
+
+    @Bind(R.id.fab2)
+    FloatingActionButton jump;
+
     @Bind(R.id.content)
     CoordinatorLayout clContent;
     //Feed
@@ -40,6 +44,7 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     private static final int ANIM_DURATION_TOOLBAR = 300;
     private static final int ANIM_DURATION_FAB = 400;
 
+    public static final String ARG_REVEAL_START_LOCATION = "reveal_start_location";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +64,15 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
             }
         });
         */
+       /* FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab2);
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Test ", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
 
+            }
+        });*/
         // NEW CONSTRUCTION
         if (savedInstanceState == null) {
             pendingIntroAnimation = true;
@@ -191,7 +204,7 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
         }, 500);
     }
 
-
+    // Listener
     @Override
     public void onCommentsClick(View v, int position) {
 
@@ -206,4 +219,17 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     public void onProfileClick(View v) {
 
     }
+    //NEW
+    public static void startUserProfileFromLocation(int[] startingLocation, Activity startingActivity) {
+        Intent intent = new Intent(startingActivity, UserProfileActivity.class);
+        intent.putExtra(ARG_REVEAL_START_LOCATION, startingLocation);
+        startingActivity.startActivity(intent);
+    }
+
+    @OnClick (R.id.fab2)
+    public void go (){
+        Intent intent = new Intent(this, GalleryActivity.class);
+        startActivity(intent);
+    }
+
 }

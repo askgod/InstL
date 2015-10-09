@@ -5,9 +5,9 @@
             android:icon="@drawable/ic_global_menu_feed"
             android:title="User Feed" />
         <item
-            android:id="@+id/menu_direct"
+            android:id="@+id/menu_gallery"
             android:icon="@drawable/ic_global_menu_direct"
-            android:title="Local Gallery" />
+            android:title="Gallery" />
         <item
             android:id="@+id/menu_discover"
             android:icon="@drawable/ic_action_web_site"

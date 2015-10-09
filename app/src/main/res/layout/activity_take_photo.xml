@@ -162,6 +162,7 @@
                     android:layout_weight="1">
 
                     <ImageButton
+                        android:id="@+id/btn_file_chooser"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:layout_gravity="center"

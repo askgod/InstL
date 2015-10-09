@@ -30,10 +30,12 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.net.URISyntaxException;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -114,14 +116,14 @@ public class TakePhotoActivity extends BaseActivity
     @Bind(R.id.camera_remove_filter)
     ImageButton camera_remove_filter;
 
+    @Bind(R.id.btn_file_chooser)
+    ImageButton btn_file_chooser;
+
     @Bind(R.id.camera_grid_line)
     ImageView camera_grid_line;
 
     private Camera mCamera;
     private CameraPreview mPreview;
-    //private CameraPreview mPreview;
-
-    Bitmap photoBitMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,6 +197,7 @@ public class TakePhotoActivity extends BaseActivity
 
     @Override
     protected void onDestroy() {
+
         // Release Camera
         if(mCamera!=null){
             mCamera.release();
@@ -202,14 +205,15 @@ public class TakePhotoActivity extends BaseActivity
         }
         super.onDestroy();
     }
-    public void onPause() {
-        super.onPause();
-        mCamera.setPreviewCallback(null);
-        mCamera.stopPreview();
-        mCamera.release();
-        mCamera = null;
-    }
 
+    @Override
+    protected void onStop(){
+        super.onStop();
+
+        if(mCamera!=null){
+            mCamera.release();
+        }
+    }
     // Inject bind views functions
     @OnClick(R.id.btnTakePhoto)
     public void onTakePhotoClick() {
@@ -405,8 +409,61 @@ public class TakePhotoActivity extends BaseActivity
         v.draw(c);
         return b;
     }
+    // FILE CHOOSER
+    private static final int FILE_SELECT_CODE = 0;
 
-    // Filters
+    private void showFileChooser() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        mPreview.getHolder().removeCallback(mPreview);
+        try {
+            startActivityForResult(
+                    Intent.createChooser(intent, "Select a File to Upload"),
+                    FILE_SELECT_CODE);
+        } catch (android.content.ActivityNotFoundException ex) {
+            // Potentially direct the user to the Market with a Dialog
+            Toast.makeText(this, "Please install a File Manager.",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case FILE_SELECT_CODE:
+                if (resultCode == RESULT_OK) {
+                    // Get the Uri of the selected file
+                    Uri uri = data.getData();
+                    Log.d(TAG, "File Uri: " + uri.toString());
+                    // Get the path
+                    String path = null;
+                    try {
+                        path = Utils.getPath(this, uri);
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                    Log.d(TAG, "File Path: " + path);
+                    // Get the file instance
+                    // File file = new File(path);
+                    // Initiate the upload
+                }
+                break;
+
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    // CLick listener
+    @OnClick (R.id.btn_file_chooser)
+    public void choose_file(){
+        Log.i("info", "Choose file");
+        mCamera.stopPreview();
+        mCamera.release();
+        showFileChooser();
+    }
+
+
     @OnClick (R.id.camera_filter1)
     public void add_filter1(){
         Log.i("info", "Filters change red");
@@ -415,19 +472,19 @@ public class TakePhotoActivity extends BaseActivity
 
     @OnClick (R.id.camera_filter2)
     public void add_filter2(){
-        Log.i("info", "Filters change red");
+        Log.i("info", "Filters change BLUE");
         ivTakenPhoto.setColorFilter(Color.BLUE, PorterDuff.Mode.LIGHTEN);
     }
 
     @OnClick (R.id.camera_filter3)
     public void add_filter3(){
-        Log.i("info", "Filters change red");
+        Log.i("info", "Filters change YELLOW");
         ivTakenPhoto.setColorFilter(Color.YELLOW, PorterDuff.Mode.LIGHTEN);
     }
 
     @OnClick (R.id.camera_remove_filter)
     public void remove_filter(){
-        Log.i("info", "Filters change red");
+        Log.i("info", "Filters change back");
         ivTakenPhoto.setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.LIGHTEN);
     }
 

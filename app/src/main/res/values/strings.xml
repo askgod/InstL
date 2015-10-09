@@ -36,4 +36,10 @@
         <item>http://scontent-b-fra.cdninstagram.com/hphotos-xaf1/t51.2885-15/s306x306/e15/10899087_405295322969722_20422376_n.jpg</item>
     </string-array>
     <string name="user_profile_photo"></string>
+    <string name="title_activity_gallery">GalleryActivity</string>
+    <string name="title_activity_image_detail">ImageDetailActivity</string>
+
+    <!-- For gallery string -->
+    <string name="no_network_connection_toast">No_Network</string>
+    <string name="imageview_description">description</string>
 </resources>

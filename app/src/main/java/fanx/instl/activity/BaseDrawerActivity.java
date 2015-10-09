@@ -2,7 +2,6 @@ package fanx.instl.activity;
 
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +11,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-
 import butterknife.Bind;
 import butterknife.OnClick;
 import fanx.instl.R;
-import fanx.instl.activity.InstagramUtils.AppData;
 import fanx.instl.activity.InstagramUtils.InstagramCurrentUserProfile;
 import fanx.instl.utils.CircleTransformation;
 
@@ -36,6 +32,7 @@ public class BaseDrawerActivity extends BaseActivity {
     // NEW
     @Bind(R.id.label_fullname)
     TextView full_name;
+
 
     @Override
     public void setContentView(int layoutResID) {
@@ -64,23 +61,6 @@ public class BaseDrawerActivity extends BaseActivity {
         }
     }
 
-    @OnClick(R.id.vGlobalMenuHeader)
-    public void onGlobalMenuHeaderClick(final View v) {
-        drawerLayout.closeDrawer(Gravity.LEFT);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                int[] startingLocation = new int[2];
-                v.getLocationOnScreen(startingLocation);
-                startingLocation[0] += v.getWidth() / 2;
-                // construction
-                UserProfileActivity.startUserProfileFromLocation(startingLocation, BaseDrawerActivity.this);
-                overridePendingTransition(0, 0);
-
-            }
-        }, 200);
-    }
-
     private void setupHeader() {
         this.avatarSize = getResources().getDimensionPixelSize(R.dimen.global_menu_avatar_size);
         this.profilePhoto = InstagramCurrentUserProfile.profile_image_url;
@@ -92,6 +72,22 @@ public class BaseDrawerActivity extends BaseActivity {
                 .transform(new CircleTransformation())
                 .into(ivMenuUserProfilePhoto);
     }
-    // From Instagram Api
+    // List item
+    @OnClick(R.id.vGlobalMenuHeader)
+    public void onGlobalMenuHeaderClick(final View v) {
+        drawerLayout.closeDrawer(Gravity.LEFT);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                int[] startingLocation = new int[2];
+                v.getLocationOnScreen(startingLocation);
+                startingLocation[0] += v.getWidth() / 2;
+                UserProfileActivity.startUserProfileFromLocation(startingLocation, BaseDrawerActivity.this);
+                overridePendingTransition(0, 0);
+            }
+        }, 200);
+
+    }
+
 
 }
