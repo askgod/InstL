@@ -74,12 +74,11 @@ public class InstagramCurrentUserProfile extends AsyncTask <Void, Void, JSONObje
 
                 try {
 
-                    String profileURL = API_URL + "/users/" + getUserId(context_userProfileActivity) + "/?access_token=" + getAccessToken(context_userProfileActivity);
+                    String profileURL = API_URL + "/users/" + AppData.getUserId(context_userProfileActivity) + "/?access_token=" + AppData.getAccessToken(context_userProfileActivity);
                     URL url = new URL(profileURL);
                     HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
                     urlConnection.setRequestMethod("GET");
                     urlConnection.setDoInput(true);
-                    int responseCode = urlConnection.getResponseCode();
                     urlConnection.connect();
                     String response = AppData.streamToString(urlConnection.getInputStream());
 
@@ -134,24 +133,4 @@ public class InstagramCurrentUserProfile extends AsyncTask <Void, Void, JSONObje
             e.printStackTrace();
         }
     }
-
-    public String getAccessToken(Context c)
-    {
-        SharedPreferences s = c.getSharedPreferences(SHARED, Context.MODE_PRIVATE);
-        return s.getString("access_token",null);
-    }
-
-    public boolean hasAccessToken(Context c)
-    {
-        if (this.getAccessToken(c) != null )
-            return true;
-        else
-            return false;
-    }
-
-    public String getUserId(Context c){
-        SharedPreferences s = c.getSharedPreferences(SHARED, Context.MODE_PRIVATE);
-        return s.getString("id",null);
-    }
-
 }

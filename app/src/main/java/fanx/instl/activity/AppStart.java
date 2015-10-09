@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import fanx.instl.R;
+import fanx.instl.activity.InstagramUtils.AppData;
 import fanx.instl.activity.InstagramUtils.InstagramSession;
 
 public class AppStart extends Activity {
@@ -24,14 +25,12 @@ public class AppStart extends Activity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                InstagramSession i =new InstagramSession(AppStart.this);
+
                 try {
-                    if (i.hasAccessToken()) {
-                        Log.i("info", String.valueOf(i.hasAccessToken()));
-                        //Hi Xuan not sure why this part is not working
+                    if (AppData.hasAccessToken(getApplicationContext())) {
+
                         //Create an Intent that will start the Main Activity.
                         Toast.makeText(AppStart.this, "Redirecting to MainActivity ...", Toast.LENGTH_LONG);
-                        Log.e("AppStart", "Main Activity");
                         Intent mainIntent = new Intent(AppStart.this, MainActivity.class);
                         startActivity(mainIntent);
 

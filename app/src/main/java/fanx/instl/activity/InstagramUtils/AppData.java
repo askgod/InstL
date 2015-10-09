@@ -143,9 +143,9 @@ public class AppData {
         return s.getString("access_token",null);
     }
 
-    public boolean hasAccessToken(Context c)
+    public static boolean hasAccessToken(Context c)
     {
-        if (this.getAccessToken(c) != null )
+        if (getAccessToken(c) != null )
             return true;
         else
             return false;

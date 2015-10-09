@@ -27,7 +27,6 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View v) {
                 try {
-                    //Log.e("HTML: ", submittingForm());
                     Intent nextIntent = new Intent(LoginActivity.this, MainActivity.class);
                     String param_username =  username.getText().toString();
                     String param_password = password.getText().toString();
