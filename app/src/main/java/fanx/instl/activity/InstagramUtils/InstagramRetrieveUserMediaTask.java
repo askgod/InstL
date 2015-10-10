@@ -45,7 +45,7 @@ public class InstagramRetrieveUserMediaTask extends AsyncTask<Void, Void, Instag
     protected ConsolidatedObject doInBackground(Void... param)
     {
         try {
-            URL url = new URL(this.urlString);
+            URL url = new URL(this.urlString);;
             HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.setDoInput(true);
@@ -81,8 +81,12 @@ public class InstagramRetrieveUserMediaTask extends AsyncTask<Void, Void, Instag
                             JSONObject standard_resolution = image.getJSONObject("standard_resolution");
                             instagramUserMedia.standard_resolution = standard_resolution.getString("url");
 
-                            JSONObject caption = media.getJSONObject("caption");
-                            instagramUserMedia.text = caption.getString("text");
+                            try {
+                                JSONObject caption = media.getJSONObject("caption");
+                                instagramUserMedia.text = caption.getString("text");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
 
                             instagramUserMediaArrayList.add(instagramUserMedia);
                         }
@@ -113,9 +117,11 @@ public class InstagramRetrieveUserMediaTask extends AsyncTask<Void, Void, Instag
 
     protected void onPostExecute(ConsolidatedObject result)
     {
-        Log.e("IRetrieveUserMediaTask", "onPostExecute");
-        gridView.setAdapter(new CustomAdapter(context, result.instagramUserMediaArrayList));
-        //result.instagramUserMediaURLList//List<String>
+        //Log.e("Media ID", result.instagramUserMediaArrayList.get(1).id);
+        //Log.e("Media ID", result.instagramUserMediaArrayList.get(0).id);
+
+        //gridView.setAdapter(new CustomAdapter(context, result.instagramUserMediaArrayList));
+        //serult.instagramUserMediaURLList
 
     }
 
@@ -167,29 +173,6 @@ public class InstagramRetrieveUserMediaTask extends AsyncTask<Void, Void, Instag
             // TODO Auto-generated method stub
 
             Holder holder;
-            /*
-            holder = new Holder();
-            View rowView;
-
-            rowView = inflater.inflate(R.layout.user_photo_layout, null);
-            holder.tv=(TextView) rowView.findViewById(R.id.textView1);
-            holder.img=(ImageView) rowView.findViewById(R.id.imageView1);
-
-            holder.tv.setText(instagramUserMediaArrayList.get(position).text);
-            ImageLoadTask i = new ImageLoadTask(instagramUserMediaArrayList.get(position).thumbnail, holder.img);
-
-
-            rowView.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    // TODO Auto-generated method stub
-                    Toast.makeText(context, "You Clicked " + instagramUserMediaArrayList.get(position).id, Toast.LENGTH_LONG).show();
-                }
-            });
-
-            return rowView;
-            */
 
             /*
             if(convertView == null)
@@ -209,7 +192,7 @@ public class InstagramRetrieveUserMediaTask extends AsyncTask<Void, Void, Instag
 
             ImageLoadTask i = new ImageLoadTask(instagramUserMediaArrayList.get(position).thumbnail, holder.img);
             i.execute();
-*/
+
             convertView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -218,7 +201,7 @@ public class InstagramRetrieveUserMediaTask extends AsyncTask<Void, Void, Instag
                     Toast.makeText(context, instagramUserMediaArrayList.get(position).text, Toast.LENGTH_LONG).show();
                 }
             });
-
+            */
             return convertView;
         }
 
