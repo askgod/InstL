@@ -87,6 +87,10 @@
             android:name=".activity.AppStart$SearchUserActivity"
             android:label="@string/title_activity_search_user" >
         </activity>
+        <activity
+            android:name=".activity.ImageDetailActivity"
+            android:label="Detail" >
+        </activity>
     </application>
 
 </manifest>
