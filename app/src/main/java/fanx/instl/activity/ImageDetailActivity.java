@@ -21,7 +21,7 @@ import fanx.instl.R;
 import fanx.instl.ui.ImageDetailFragment;
 import fanx.instl.utils.ImageCache;
 import fanx.instl.utils.ImageFetcher;
-import fanx.instl.utils.images;
+import fanx.instl.utils.Images;
 import fanx.instl.utils.Utils;
 
 public class ImageDetailActivity extends FragmentActivity implements View.OnClickListener {
@@ -65,7 +65,7 @@ public class ImageDetailActivity extends FragmentActivity implements View.OnClic
         mImageFetcher.setImageFadeIn(false);
 
         // Set up ViewPager and backing adapter
-        mAdapter = new ImagePagerAdapter(getSupportFragmentManager(), images.imageUrls.length);
+        mAdapter = new ImagePagerAdapter(getSupportFragmentManager(), Images.imageUrls.length);
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setAdapter(mAdapter);
         mPager.setPageMargin((int) getResources().getDimension(R.dimen.horizontal_page_margin));
@@ -175,7 +175,7 @@ public class ImageDetailActivity extends FragmentActivity implements View.OnClic
 
         @Override
         public Fragment getItem(int position) {
-            return ImageDetailFragment.newInstance(images.imageUrls[position]);
+            return ImageDetailFragment.newInstance(Images.imageUrls[position]);
         }
     }
 
