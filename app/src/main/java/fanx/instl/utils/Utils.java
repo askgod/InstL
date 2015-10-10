@@ -14,7 +14,6 @@ import android.view.WindowManager;
 import java.net.URISyntaxException;
 
 import fanx.instl.activity.GalleryActivity;
-import fanx.instl.activity.ImageDetailActivity;
 
 /**
  * Created by FanX on 15/10/7.
@@ -92,8 +91,8 @@ public class Utils {
             if (Utils.hasHoneycomb()) {
                 threadPolicyBuilder.penaltyFlashScreen();
                 vmPolicyBuilder
-                        .setClassInstanceLimit(GalleryActivity.class, 1)
-                        .setClassInstanceLimit(ImageDetailActivity.class, 1);
+                        .setClassInstanceLimit(GalleryActivity.class, 1);
+                      //  .setClassInstanceLimit(ImageDetailActivity.class, 1);
             }
             StrictMode.setThreadPolicy(threadPolicyBuilder.build());
             StrictMode.setVmPolicy(vmPolicyBuilder.build());
