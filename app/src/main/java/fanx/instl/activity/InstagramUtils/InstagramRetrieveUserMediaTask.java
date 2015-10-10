@@ -31,7 +31,7 @@ import fanx.instl.activity.UserProfileActivity;
 /**
  * Created by SShrestha on 30/09/2015.
  */
-public class InstagramRetrieveUserMediaTask extends AsyncTask<Void, Void, String> {
+public class InstagramRetrieveUserMediaTask extends AsyncTask<Void, Void, InstagramRetrieveUserMediaTask.ConsolidatedObject> {
     String urlString = "https://api.instagram.com/v1/users/self/media/recent/?access_token=ACCESS-TOKEN";
     GridView gridView;
     Context context;
@@ -42,7 +42,7 @@ public class InstagramRetrieveUserMediaTask extends AsyncTask<Void, Void, String
     }
 
     @Override
-    protected String doInBackground(Void... param)
+    protected ConsolidatedObject doInBackground(Void... param)
     {
         try {
             URL url = new URL(this.urlString);
@@ -52,58 +52,76 @@ public class InstagramRetrieveUserMediaTask extends AsyncTask<Void, Void, String
             int responseCode = urlConnection.getResponseCode();
             urlConnection.connect();
             String response = AppData.streamToString(urlConnection.getInputStream());
-            return response;
+
+            if (response != null){
+                try {
+                    ArrayList<InstagramUserMedia> instagramUserMediaArrayList = new ArrayList<InstagramUserMedia>();
+                    ArrayList<String> instagramUserMediaURLList = new ArrayList<String>();
+
+                    JSONObject jsonObj = (JSONObject) new JSONTokener(response).nextValue();
+                    JSONArray data = jsonObj.getJSONArray("data");
+                    for (int i = 0; i < data.length(); i++) {
+                        JSONObject media = data.getJSONObject(i);
+
+                        if (media.getString("type").equalsIgnoreCase("image"))
+                        {
+                            InstagramUserMedia instagramUserMedia = new InstagramUserMedia();
+
+                            JSONObject image = media.getJSONObject("images");
+                            instagramUserMedia.id = media.getString("id");
+
+                            JSONObject low_resolution = image.getJSONObject("low_resolution");
+                            instagramUserMedia.low_resolution = low_resolution.getString("url");
+
+                            JSONObject thumbnail = image.getJSONObject("thumbnail");
+                            instagramUserMedia.thumbnail = thumbnail.getString("url");
+
+                            instagramUserMediaURLList.add(thumbnail.getString("url"));
+
+                            JSONObject standard_resolution = image.getJSONObject("standard_resolution");
+                            instagramUserMedia.standard_resolution = standard_resolution.getString("url");
+
+                            JSONObject caption = media.getJSONObject("caption");
+                            instagramUserMedia.text = caption.getString("text");
+
+                            instagramUserMediaArrayList.add(instagramUserMedia);
+                        }
+                    }
+
+                    ConsolidatedObject consolidatedObject = new ConsolidatedObject();
+
+                    consolidatedObject.instagramUserMediaArrayList = instagramUserMediaArrayList;
+                    consolidatedObject.instagramUserMediaURLList = instagramUserMediaURLList;
+
+                    return consolidatedObject;
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            else
+            {
+                Log.e("Result", "Null");
+            }
+            return null;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    protected void onPostExecute(String result)
+    protected void onPostExecute(ConsolidatedObject result)
     {
         Log.e("IRetrieveUserMediaTask", "onPostExecute");
-        ArrayList<InstagramUserMedia> instagramUserMediaArrayList = new ArrayList<InstagramUserMedia>();
-        if (result != null){
-            try {
-                JSONObject jsonObj = (JSONObject) new JSONTokener(result).nextValue();
-                JSONArray data = jsonObj.getJSONArray("data");
-                for (int i = 0; i < data.length(); i++) {
-                    JSONObject media = data.getJSONObject(i);
+        gridView.setAdapter(new CustomAdapter(context, result.instagramUserMediaArrayList));
+        //result.instagramUserMediaURLList//List<String>
 
-                    if (media.getString("type").equalsIgnoreCase("image"))
-                    {
-                        InstagramUserMedia instagramUserMedia = new InstagramUserMedia();
+    }
 
-                        JSONObject image = media.getJSONObject("images");
-                        instagramUserMedia.id = media.getString("id");
-
-                        JSONObject low_resolution = image.getJSONObject("low_resolution");
-                        instagramUserMedia.low_resolution = low_resolution.getString("url");
-
-                        JSONObject thumbnail = image.getJSONObject("thumbnail");
-                        instagramUserMedia.thumbnail = thumbnail.getString("url");
-
-                        JSONObject standard_resolution = image.getJSONObject("standard_resolution");
-                        instagramUserMedia.standard_resolution = standard_resolution.getString("url");
-
-                        JSONObject caption = media.getJSONObject("caption");
-                        instagramUserMedia.text = caption.getString("text");
-
-                        instagramUserMediaArrayList.add(instagramUserMedia);
-                    }
-                }
-
-                gridView.setAdapter(new CustomAdapter(context, instagramUserMediaArrayList));
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        else
-        {
-            Log.e("Result", "Null");
-        }
-
+    public class ConsolidatedObject{
+        public ArrayList<InstagramUserMedia> instagramUserMediaArrayList;
+        public List<String> instagramUserMediaURLList;
     }
 
     public class CustomAdapter extends BaseAdapter {
