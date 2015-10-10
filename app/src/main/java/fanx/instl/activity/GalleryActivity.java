@@ -1,9 +1,5 @@
 package fanx.instl.activity;
 
-import java.io.File;
-import java.util.ArrayList;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,9 +9,9 @@ import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -23,31 +19,36 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import fanx.instl.R;
 
-public class GalleryActivity extends Activity {
-    private GridView sdcardImages;
+public class GalleryActivity extends BaseDrawerActivity {
+    private GridView gallery_grid;
     private FileAdapter fileAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_gallery);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
+        setSupportActionBar(toolbar);
 
         setupViews();
         setProgressBarIndeterminateVisibility(true);
         new AsyncLoadedImage().execute();
+
     }
 
     /*
      * 初始化文件浏览View
      */
     private void setupViews() {
-        sdcardImages = (GridView) findViewById(R.id.gallery_gridview);
-        sdcardImages.setOnItemClickListener(new fileListener());
+        gallery_grid = (GridView) findViewById(R.id.gallery_gridview);
+        gallery_grid.setOnItemClickListener(new fileListener());
         fileAdapter = new FileAdapter(getApplicationContext());
-        sdcardImages.setAdapter(fileAdapter);
+        gallery_grid.setAdapter(fileAdapter);
     }
 
     /*
@@ -55,7 +56,7 @@ public class GalleryActivity extends Activity {
      */
     protected void onDestroy() {
         super.onDestroy();
-        final GridView grid = sdcardImages;
+        final GridView grid = gallery_grid;
         final int count = grid.getChildCount();
         ImageView v = null;
         for (int i = 0; i < count; i++) {
@@ -80,15 +81,13 @@ public class GalleryActivity extends Activity {
     class fileListener implements OnItemClickListener {
         public void onItemClick(AdapterView<?> paramAdapterView,
                                 View paramView, int paramInt, long paramLong) {
-            LoadedImage loadedImage = (LoadedImage) sdcardImages.getItemAtPosition(paramInt);
+            LoadedImage loadedImage = (LoadedImage) gallery_grid.getItemAtPosition(paramInt);
 
             showMsg(""+loadedImage.getPicPath());
 
-            //Intent intentPicView = new Intent(getBaseContext(),
-            //        ImageDetailActivity.class);
-            //intentPicView.putExtra("picPath", loadedImage.getPicPath());
-            //startActivity(intentPicView);
-
+            Intent intentPicView = new Intent(getBaseContext(), ImageDetailActivity.class);
+            intentPicView.putExtra("picPath", loadedImage.getPicPath());
+            startActivity(intentPicView);
         }
     }
 
@@ -111,7 +110,7 @@ public class GalleryActivity extends Activity {
                     paths[i] = files[i].getPath();
                     try {
                         BitmapFactory.Options options = new BitmapFactory.Options();
-                        options.inSampleSize = 50;
+                        options.inSampleSize = 2;
                         bitmap = BitmapFactory.decodeFile(paths[i], options);
                         newBitmap = ThumbnailUtils.extractThumbnail(bitmap,
                                 330, 330);
@@ -179,6 +178,7 @@ public class GalleryActivity extends Activity {
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             imageView.setPadding(0, 1, 1, 1);
             imageView.setImageBitmap(photos.get(position).getBitmap());
+
             return imageView;
         }
     }

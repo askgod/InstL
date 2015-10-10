@@ -3,12 +3,8 @@ package fanx.instl.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.TabLayout;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -21,21 +17,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-import org.w3c.dom.Text;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -137,17 +118,6 @@ public class UserProfileActivity extends BaseDrawerActivity implements RevealBac
         tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_label_white));
     }
 
-    private void setupUserProfileGrid() {
-        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
-        //rvUserProfile.setLayoutManager(layoutManager);
-        //rvUserProfile.setOnScrollListener(new RecyclerView.OnScrollListener() {
-          //  @Override
-            //public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-              //  userPhotosAdapter.setLockedAnimations(true);
-           // }
-        //});
-
-    }
 
     private void setupRevealBackground(Bundle savedInstanceState) {
         vRevealBackground.setOnStateChangeListener(this);
