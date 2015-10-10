@@ -18,14 +18,13 @@ public class GalleryActivity extends FragmentActivity {
         if (BuildConfig.DEBUG) {
             Utils.enableStrictMode();
         }
-        
 
         if (getSupportFragmentManager().findFragmentByTag(TAG) == null) {
             final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.add(android.R.id.content, new ImageGridFragment(), TAG);
             ft.commit();
         }
-    }
 
+    }
 
 }

@@ -16,10 +16,16 @@
 
 package fanx.instl.utils;
 
+import android.os.Environment;
+import android.util.Log;
+
+import java.io.File;
+
 /**
  * Some simple test data to use for this sample app.
  */
 public class Images {
+
 
     /**
      * This are PicasaWeb URLs and could potentially change. Ideally the PicasaWeb API should be

@@ -42,4 +42,6 @@
     <!-- For gallery string -->
     <string name="no_network_connection_toast">No_Network</string>
     <string name="imageview_description">description</string>
+    <string name="title_activity_discover_activitiy">DiscoverActivitiy</string>
+    <string name="title_activity_activity_feed_acitivity">ActivityFeedAcitivity</string>
 </resources>

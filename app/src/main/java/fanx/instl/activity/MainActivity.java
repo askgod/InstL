@@ -34,6 +34,13 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     @Bind(R.id.fab2)
     FloatingActionButton jump;
 
+    @Bind(R.id.fab3)
+    FloatingActionButton fab3;
+
+    @Bind(R.id.fab4)
+    FloatingActionButton fab4;
+
+
     @Bind(R.id.content)
     CoordinatorLayout clContent;
     //Feed
@@ -232,4 +239,15 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
         startActivity(intent);
     }
 
+    @OnClick (R.id.fab3)
+    public void toDiscvoer (){
+        Intent intent = new Intent(this, DiscoverActivitiy.class);
+        startActivity(intent);
+    }
+
+    @OnClick (R.id.fab4)
+    public void toActivity (){
+        Intent intent = new Intent(this, ActivityFeedAcitivity.class);
+        startActivity(intent);
+    }
 }
