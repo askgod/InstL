@@ -74,11 +74,6 @@
             android:theme="@style/AppTheme" >
         </activity>
         <activity
-            android:name=".activity.ImageDetailActivity"
-            android:label="@string/title_activity_image_detail"
-            android:theme="@style/AppTheme" >
-        </activity>
-        <activity
             android:name=".activity.DiscoverActivitiy"
             android:label="@string/title_activity_discover_activitiy"
             android:theme="@style/AppTheme" >

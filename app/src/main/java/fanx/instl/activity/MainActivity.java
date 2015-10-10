@@ -80,6 +80,8 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
 
             }
         });*/
+
+        getImageUriList();
         // NEW CONSTRUCTION
         if (savedInstanceState == null) {
             pendingIntroAnimation = true;
@@ -249,5 +251,9 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     public void toActivity (){
         Intent intent = new Intent(this, ActivityFeedAcitivity.class);
         startActivity(intent);
+    }
+
+    public void getImageUriList (){
+
     }
 }
