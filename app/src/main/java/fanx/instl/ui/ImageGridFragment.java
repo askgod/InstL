@@ -44,7 +44,7 @@ import fanx.instl.R;
 import fanx.instl.activity.ImageDetailActivity;
 import fanx.instl.utils.ImageCache;
 import fanx.instl.utils.ImageFetcher;
-import fanx.instl.utils.Images;
+import fanx.instl.utils.images;
 import fanx.instl.utils.Utils;
 
 /**
@@ -242,13 +242,13 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
             }
 
             // Size + number of columns for top empty row
-            return Images.imageThumbUrls.length + mNumColumns;
+            return images.imageThumbUrls.length + mNumColumns;
         }
 
         @Override
         public Object getItem(int position) {
             return position < mNumColumns ?
-                    null : Images.imageThumbUrls[position - mNumColumns];
+                    null : images.imageThumbUrls[position - mNumColumns];
         }
 
         @Override
@@ -303,7 +303,7 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
 
             // Finally load the image asynchronously into the ImageView, this also takes care of
             // setting a placeholder image while the background thread runs
-            mImageFetcher.loadImage(Images.imageThumbUrls[position - mNumColumns], imageView);
+            mImageFetcher.loadImage(images.imageThumbUrls[position - mNumColumns], imageView);
             return imageView;
             //END_INCLUDE(load_gridview_item)
         }

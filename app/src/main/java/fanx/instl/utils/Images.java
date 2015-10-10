@@ -24,7 +24,7 @@ import java.io.File;
 /**
  * Some simple test data to use for this sample app.
  */
-public class Images {
+public class images {
 
 
     /**

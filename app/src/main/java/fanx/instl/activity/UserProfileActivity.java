@@ -3,6 +3,7 @@ package fanx.instl.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.TabLayout;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,8 +56,8 @@ public class UserProfileActivity extends BaseDrawerActivity implements RevealBac
     @Bind(R.id.vRevealBackground)
     RevealBackgroundView vRevealBackground;
     // Grid Recycle View
-    @Bind(R.id.rvUserProfile)
-    RecyclerView rvUserProfile;
+    //@Bind(R.id.rvUserProfile)
+    //RecyclerView rvUserProfile;
 
     @Bind(R.id.tlUserProfileTabs)
     TabLayout tlUserProfileTabs;
@@ -114,11 +116,17 @@ public class UserProfileActivity extends BaseDrawerActivity implements RevealBac
                 ivUserProfilePhoto);
         instagramUser.execute();
 
+         InstagramRetrieveUserMediaTask instagramRetrieveUserMediaTask =
+                 new InstagramRetrieveUserMediaTask(this,(GridView) findViewById(R.id.gridView2));
+        instagramRetrieveUserMediaTask.execute();
+        //
         setupTabs();
-        setupUserProfileGrid();
+        //setupUserProfileGrid();
         setupRevealBackground(savedInstanceState);
         //
         setRoundImage();
+
+
         //
     }
 
@@ -131,13 +139,13 @@ public class UserProfileActivity extends BaseDrawerActivity implements RevealBac
 
     private void setupUserProfileGrid() {
         final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
-        rvUserProfile.setLayoutManager(layoutManager);
-        rvUserProfile.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                userPhotosAdapter.setLockedAnimations(true);
-            }
-        });
+        //rvUserProfile.setLayoutManager(layoutManager);
+        //rvUserProfile.setOnScrollListener(new RecyclerView.OnScrollListener() {
+          //  @Override
+            //public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+              //  userPhotosAdapter.setLockedAnimations(true);
+           // }
+        //});
 
     }
 
@@ -162,16 +170,16 @@ public class UserProfileActivity extends BaseDrawerActivity implements RevealBac
     @Override
     public void onStateChange(int state) {
         if (RevealBackgroundView.STATE_FINISHED == state) {
-            rvUserProfile.setVisibility(View.VISIBLE);
+            //rvUserProfile.setVisibility(View.VISIBLE);
             tlUserProfileTabs.setVisibility(View.VISIBLE);
             vUserProfileRoot.setVisibility(View.VISIBLE);
             userPhotosAdapter = new UserProfileAdapter(this);
-            rvUserProfile.setAdapter(userPhotosAdapter);
+            //rvUserProfile.setAdapter(userPhotosAdapter);
             animateUserProfileOptions();
             animateUserProfileHeader();
         } else {
             tlUserProfileTabs.setVisibility(View.INVISIBLE);
-            rvUserProfile.setVisibility(View.INVISIBLE);
+            //rvUserProfile.setVisibility(View.INVISIBLE);
             vUserProfileRoot.setVisibility(View.INVISIBLE);
         }
     }
@@ -216,5 +224,13 @@ public class UserProfileActivity extends BaseDrawerActivity implements RevealBac
                 .centerCrop()
                 .transform(new CircleTransformation())
                 .into(ivUserProfilePhoto);
+    }
+
+    private Target loadtarget;
+
+
+
+    public void handleLoadedBitmap(Bitmap b) {
+        // do something here
     }
 }
