@@ -16,12 +16,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvUserProfile"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -204,6 +198,9 @@
                     app:layout_scrollFlags="scroll|enterAlways"
                     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
+
+
+
                     <ImageView
                         android:id="@+id/ivLogo"
                         android:layout_width="match_parent"
@@ -211,6 +208,7 @@
                         android:layout_gravity="center"
                         android:scaleType="center"
                         android:src="@drawable/img_toolbar_logo" />
+
                 </android.support.v7.widget.Toolbar>
 
             </android.support.design.widget.CollapsingToolbarLayout>
@@ -231,6 +229,13 @@
 
             </FrameLayout>
 
+            <GridView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/gridView2"
+                android:numColumns="4"
+                android:layout_gravity="bottom" />
+
 
         </android.support.design.widget.AppBarLayout>
 
@@ -249,6 +254,8 @@
             app:elevation="6dp"
             app:pressedTranslationZ="12dp" />
     </android.support.design.widget.CoordinatorLayout>
+
+
 
 
 </RelativeLayout>

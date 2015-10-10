@@ -43,7 +43,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.context = context;
         this.cellSize = Utils.getScreenWidth(context) / 3;
         this.photos = Arrays.asList(context.getResources().getStringArray(R.array.user_photos));
-        //this.photos = InstagramRetrieveUserMediaTask.photoList;
+        //this.photos = InstagramRetrieveUserMediaTask.photos;
     }
 
     @Override
