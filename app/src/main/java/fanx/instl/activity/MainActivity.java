@@ -233,7 +233,7 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
 
     @OnClick (R.id.fab3)
     public void toDiscvoer (){
-        Intent intent = new Intent(this, DiscoverActivitiy.class);
+        Intent intent = new Intent(this, AppStart.SearchUserActivity.class);
         startActivity(intent);
     }
 

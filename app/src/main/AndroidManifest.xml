@@ -83,7 +83,9 @@
             android:label="@string/title_activity_activity_feed_acitivity"
             android:theme="@style/AppTheme" >
         </activity>
-        <activity android:name=".activity.ImageDetailActivity" >
+        <activity
+            android:name=".activity.AppStart$SearchUserActivity"
+            android:label="@string/title_activity_search_user" >
         </activity>
     </application>
 

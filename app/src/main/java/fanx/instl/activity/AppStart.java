@@ -4,14 +4,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import fanx.instl.R;
 import fanx.instl.activity.InstagramUtils.AppData;
-import fanx.instl.activity.InstagramUtils.InstagramSession;
+import fanx.instl.activity.InstagramUtils.InstagramUserSearchTask;
 
 public class AppStart extends Activity {
     private final int SPLASH_DISPLAY_LENGTH = 1000;
@@ -111,4 +115,73 @@ public class AppStart extends Activity {
         Log.e("AppStart", "onRestart");
     }
 
+    public static class SearchUserActivity extends AppCompatActivity {
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_search_user);
+            final ListView searchResultListView = (ListView) findViewById(R.id.searchResultListView);
+
+
+
+            SearchView searchUserView =  (SearchView) findViewById(R.id.searchUserView);
+            searchUserView.setQueryHint("Search Text Here");
+            searchUserView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+
+                }
+            });
+
+            searchUserView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+
+                    if (query.length() > 3) {
+                        Log.e("SearchUserActivity", "onQueryTextSubmit");
+                        InstagramUserSearchTask instagramUserSearchTask =
+                                new InstagramUserSearchTask(SearchUserActivity.this, 25, searchResultListView);
+                        instagramUserSearchTask.execute(query.replace(" ", "+"));
+                        searchResultListView.setVisibility(SearchView.VISIBLE);
+                    } else {
+                        searchResultListView.setVisibility(SearchView.INVISIBLE);
+                    }
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    if (newText.length() > 3) {
+                        //Log.e("SearchUserActivity", "onQueryTextChange");
+                    } else {
+
+                    }
+                    return false;
+                }
+            });
+        }
+
+        @Override
+        public boolean onCreateOptionsMenu(Menu menu) {
+            // Inflate the menu; this adds items to the action bar if it is present.
+            getMenuInflater().inflate(R.menu.menu_search_user, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            // Handle action bar item clicks here. The action bar will
+            // automatically handle clicks on the Home/Up button, so long
+            // as you specify a parent activity in AndroidManifest.xml.
+            int id = item.getItemId();
+
+            //noinspection SimplifiableIfStatement
+            if (id == R.id.action_settings) {
+                return true;
+            }
+
+            return super.onOptionsItemSelected(item);
+        }
+    }
 }

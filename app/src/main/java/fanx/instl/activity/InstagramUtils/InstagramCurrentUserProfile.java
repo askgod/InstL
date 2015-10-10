@@ -40,8 +40,8 @@ public class InstagramCurrentUserProfile extends AsyncTask <Void, Void, JSONObje
 
     public InstagramCurrentUserProfile(Context context_userProfileActivity,
                                        TextView textView_full_name,
-                                       TextView textview_username,
-                                       TextView textview_bio,
+                                       TextView textView_username,
+                                       TextView textView_bio,
                                        TextView textView_website,
                                        TextView textView_mediaCounts,
                                        TextView textView_followsCounts,
@@ -49,8 +49,8 @@ public class InstagramCurrentUserProfile extends AsyncTask <Void, Void, JSONObje
                                        ImageView imageView_profile_picture)
     {
         this.textView_full_name = textView_full_name;
-        this.textview_username = textview_username;
-        this.textview_bio = textview_bio;
+        this.textview_username = textView_username;
+        this.textview_bio = textView_bio;
         this.textView_website = textView_website;
         this.textView_mediaCounts = textView_mediaCounts;
         this.textView_followsCounts = textView_followsCounts;
