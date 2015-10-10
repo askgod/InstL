@@ -120,7 +120,7 @@ public class InstagramRetrieveUserMediaTask extends AsyncTask<Void, Void, Instag
         //Log.e("Media ID", result.instagramUserMediaArrayList.get(1).id);
         //Log.e("Media ID", result.instagramUserMediaArrayList.get(0).id);
 
-        //gridView.setAdapter(new CustomAdapter(context, result.instagramUserMediaArrayList));
+        gridView.setAdapter(new CustomAdapter(context, result.instagramUserMediaArrayList));
         //serult.instagramUserMediaURLList
 
     }
@@ -174,13 +174,13 @@ public class InstagramRetrieveUserMediaTask extends AsyncTask<Void, Void, Instag
 
             Holder holder;
 
-            /*
+
             if(convertView == null)
             {
                 convertView = inflater.inflate(R.layout.user_photo_layout, null);
                 holder = new Holder();
-                holder.tv = (TextView) convertView.findViewById(R.id.textView1);
-                holder.img = (ImageView) convertView.findViewById(R.id.imageView1);
+                //holder.tv = (TextView) convertView.findViewById(R.id.textView1);
+                holder.img = (ImageView) convertView.findViewById(R.id.userPhotoThumbs);
                 convertView.setTag(holder);
             }
             else
@@ -188,7 +188,7 @@ public class InstagramRetrieveUserMediaTask extends AsyncTask<Void, Void, Instag
                 holder = (Holder) convertView.getTag();
             }
 
-            holder.tv.setText(instagramUserMediaArrayList.get(position).text.substring(0, 8) + "...");
+            //holder.tv.setText(/*instagramUserMediaArrayList.get(position).text.substring(0, 8) + */"...");
 
             ImageLoadTask i = new ImageLoadTask(instagramUserMediaArrayList.get(position).thumbnail, holder.img);
             i.execute();
@@ -201,7 +201,7 @@ public class InstagramRetrieveUserMediaTask extends AsyncTask<Void, Void, Instag
                     Toast.makeText(context, instagramUserMediaArrayList.get(position).text, Toast.LENGTH_LONG).show();
                 }
             });
-            */
+
             return convertView;
         }
 

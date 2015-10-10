@@ -25,12 +25,13 @@ public class ActivityFeedAcitivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ListView activityFeedListView = (ListView)findViewById(R.id.activityFeedListView);
+        /*ListView activityFeedListView = (ListView)findViewById(R.id.activityFeedListView);
 
         GridView g = (GridView) findViewById(R.id.gridView);
 
-        //InstagramRetrieveUserMediaTask i = new InstagramRetrieveUserMediaTask(getApplicationContext(), g);
-        //i.execute();
+        InstagramRetrieveUserMediaTask i = new InstagramRetrieveUserMediaTask(getApplicationContext(), g);
+        i.execute();
+
         DisplayMediaLikeUserTask d = new DisplayMediaLikeUserTask(getApplicationContext(), activityFeedListView);
         d.execute("1092484232200772082_2219605693");
 
@@ -41,7 +42,7 @@ public class ActivityFeedAcitivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
     }
 
 }

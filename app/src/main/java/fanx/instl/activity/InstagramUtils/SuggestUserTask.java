@@ -201,13 +201,19 @@ public class SuggestUserTask extends AsyncTask <Void, Void, ArrayList<SuggestUse
         return null;
     }
 
-    public class InstaUser
+    public class InstaUser extends InstagramUser
     {
         public String userId;
         public String follows;
         public String followed_by;
         public String media;
         public String profile_picture;
+
+        public String id;
+        public String username;
+        public String first_name;
+        public String last_name;
+
 
 
         public InstaUser(String userId,
@@ -236,6 +242,7 @@ public class SuggestUserTask extends AsyncTask <Void, Void, ArrayList<SuggestUse
             this.profile_picture = profile_picture;
 
         }
+
 
         public String toString(){
             return "USERID: "+userId+"\nFollows: "+follows+"\nFollowedBy: "+ followed_by+"\nMedia: "+media+"\nProfile Pic: "+profile_picture;

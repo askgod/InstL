@@ -28,7 +28,7 @@ public class AppData {
 
     public String response;
 
-    public UserData[] searchUser(Context context, final String searchText, final int resultCount) {
+    /*public UserData[] searchUser(Context context, final String searchText, final int resultCount) {
         final String mAccessToken = getAccessToken(context);
         response = null;
         try {
@@ -79,7 +79,7 @@ public class AppData {
             System.out.print(e.fillInStackTrace());
             return null;
         }
-    }
+    }*/
 
 
     public static String streamToString(InputStream is) throws IOException {
@@ -124,16 +124,6 @@ public class AppData {
 
         // Broadcast the Intent.
         context.startActivity(Intent.createChooser(share, "Share to"));
-    }
-
-    public class UserData
-    {
-        public String id;
-        public String username;
-        public String first_name;
-        public String last_name;
-        public String profile_picture;
-        UserData(){}
     }
 
 
