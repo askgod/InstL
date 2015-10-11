@@ -23,6 +23,7 @@
             android:background="#ffffff"
             app:headerLayout="@layout/view_global_menu_header"
             app:itemIconTint="#CDDC39"
+            android:clickable="true"
             app:itemTextColor="#666666"
             app:menu="@menu/drawer_menu" />
 

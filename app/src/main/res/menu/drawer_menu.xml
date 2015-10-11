@@ -13,9 +13,9 @@
             android:icon="@drawable/ic_action_web_site"
             android:title="Discover" />
         <item
-            android:id="@+id/menu_popular"
+            android:id="@+id/menu_activity_feed"
             android:icon="@drawable/ic_global_menu_popular"
-            android:title="Popular" />
+            android:title="Activity Feed" />
         <item
             android:id="@+id/menu_photos_nearby"
             android:icon="@drawable/ic_global_menu_nearby"

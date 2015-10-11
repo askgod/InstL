@@ -2,7 +2,6 @@ package fanx.instl.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.util.Log;
@@ -16,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -196,11 +194,4 @@ public class UserProfileActivity extends BaseDrawerActivity implements RevealBac
                 .into(ivUserProfilePhoto);
     }
 
-    private Target loadtarget;
-
-
-
-    public void handleLoadedBitmap(Bitmap b) {
-        // do something here
-    }
 }

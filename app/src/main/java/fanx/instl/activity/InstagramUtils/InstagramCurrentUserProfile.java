@@ -1,7 +1,6 @@
 package fanx.instl.activity.InstagramUtils;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -66,6 +65,24 @@ public class InstagramCurrentUserProfile extends AsyncTask <Void, Void, JSONObje
 
         this.textView_full_name = textView_full_name;
         this.context_userProfileActivity = context_userProfileActivity;
+    }
+    // 3rd constructor by FanX
+    public InstagramCurrentUserProfile(Context context_userProfileActivity,
+                                       TextView textView_full_name,
+                                       TextView textView_website,
+                                       TextView textView_mediaCounts,
+                                       TextView textView_followsCounts,
+                                       TextView textView_followed_byCounts,
+                                       ImageView imageView_profile_picture)
+    {
+        this.textView_full_name = textView_full_name;
+        this.textView_website = textView_website;
+        this.textView_mediaCounts = textView_mediaCounts;
+        this.textView_followsCounts = textView_followsCounts;
+        this.textView_followed_byCounts = textView_followed_byCounts;
+        this.imageView_profile_picture = imageView_profile_picture;
+        this.context_userProfileActivity = context_userProfileActivity;
+
     }
 
 

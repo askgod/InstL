@@ -1,13 +1,18 @@
 package fanx.instl.activity;
 
+import android.content.Intent;
 import android.os.Handler;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -18,7 +23,8 @@ import fanx.instl.activity.InstagramUtils.InstagramCurrentUserProfile;
 import fanx.instl.utils.CircleTransformation;
 
 
-public class BaseDrawerActivity extends BaseActivity {
+public class BaseDrawerActivity extends BaseActivity
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     @Bind(R.id.drawerLayout)
     DrawerLayout drawerLayout;
@@ -29,6 +35,7 @@ public class BaseDrawerActivity extends BaseActivity {
     private int avatarSize;
     private String profilePhoto;
 
+    ViewGroup viewGroup;
     // NEW
     @Bind(R.id.label_fullname)
     TextView full_name;
@@ -37,7 +44,7 @@ public class BaseDrawerActivity extends BaseActivity {
     @Override
     public void setContentView(int layoutResID) {
         super.setContentViewWithoutInject(R.layout.activity_drawer);
-        ViewGroup viewGroup = (ViewGroup) findViewById(R.id.flContentRoot);
+        viewGroup = (ViewGroup) findViewById(R.id.flContentRoot);
         LayoutInflater.from(this).inflate(layoutResID, viewGroup, true);
         injectViews();
 
@@ -46,6 +53,10 @@ public class BaseDrawerActivity extends BaseActivity {
         instagramUser.execute();
 
         setupHeader();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.vNavigation);
+        navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     @Override
@@ -87,6 +98,51 @@ public class BaseDrawerActivity extends BaseActivity {
             }
         }, 200);
 
+    }
+
+    private Toast toast;
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawerLayout);
+
+        if (id == R.id.menu_feed) {
+            // Handle the camera action
+            Intent intent = new Intent(getBaseContext(), MainActivity.class);
+            drawer.closeDrawer(GravityCompat.START);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.menu_gallery) {
+            Intent intent = new Intent(getBaseContext(), GalleryActivity.class);
+            drawer.closeDrawer(GravityCompat.START);
+            startActivity(intent);
+
+            return true;
+        } else if (id == R.id.menu_discover) {
+            Intent intent = new Intent(getBaseContext(), SearchUserActivity.class);
+            drawer.closeDrawer(GravityCompat.START);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.menu_activity_feed) {
+            Intent intent = new Intent(getBaseContext(), ActivityFeedAcitivity.class);
+            drawer.closeDrawer(GravityCompat.START);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.menu_photos_nearby) {
+            drawer.closeDrawer(GravityCompat.START);
+            toast = Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT);
+            toast.show();
+            return true;
+        } else if (id == R.id.menu_photo_you_liked) {
+            drawer.closeDrawer(GravityCompat.START);
+            toast = Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT);
+            toast.show();
+            return true;
+        }
+
+
+        return true;
     }
 
 
