@@ -47,4 +47,5 @@
     <string name="title_activity_search_user">SearchUserActivity</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_user_feed">UserFeedActivity</string>
 </resources>
