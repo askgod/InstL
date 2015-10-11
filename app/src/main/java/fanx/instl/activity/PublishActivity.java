@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
@@ -39,6 +40,7 @@ public class PublishActivity extends BaseActivity {
     public static void openWithPhotoUri(Activity openingActivity, Uri photoUri) {
         Intent intent = new Intent(openingActivity, PublishActivity.class);
         intent.putExtra(ARG_TAKEN_PHOTO_URI, photoUri);
+        Log.i("info", ARG_TAKEN_PHOTO_URI);
         openingActivity.startActivity(intent);
     }
 
