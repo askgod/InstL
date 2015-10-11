@@ -112,38 +112,40 @@ public class BaseDrawerActivity extends BaseActivity
             Intent intent = new Intent(getBaseContext(), MainActivity.class);
             drawer.closeDrawer(GravityCompat.START);
             startActivity(intent);
+            finish();
             return true;
         } else if (id == R.id.menu_gallery) {
             Intent intent = new Intent(getBaseContext(), GalleryActivity.class);
             drawer.closeDrawer(GravityCompat.START);
             startActivity(intent);
-
+            finish();
             return true;
         } else if (id == R.id.menu_discover) {
             Intent intent = new Intent(getBaseContext(), SearchUserActivity.class);
             drawer.closeDrawer(GravityCompat.START);
             startActivity(intent);
+            finish();
             return true;
         } else if (id == R.id.menu_activity_feed) {
             Intent intent = new Intent(getBaseContext(), ActivityFeedAcitivity.class);
             drawer.closeDrawer(GravityCompat.START);
             startActivity(intent);
+            finish();
             return true;
         } else if (id == R.id.menu_photos_nearby) {
-            drawer.closeDrawer(GravityCompat.START);
+
             toast = Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT);
             toast.show();
+            drawer.closeDrawer(GravityCompat.START);
             return true;
         } else if (id == R.id.menu_photo_you_liked) {
-            drawer.closeDrawer(GravityCompat.START);
+
             toast = Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT);
             toast.show();
+            drawer.closeDrawer(GravityCompat.START);
             return true;
         }
-
-
         return true;
     }
-
 
 }

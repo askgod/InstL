@@ -1,4 +1,5 @@
 package fanx.instl.activity;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
+import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -30,16 +32,6 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     RecyclerView rvFeed;
     @Bind(R.id.fab)
     FloatingActionButton fabCreate;
-
-    @Bind(R.id.fab2)
-    FloatingActionButton jump;
-
-    @Bind(R.id.fab3)
-    FloatingActionButton fab3;
-
-    @Bind(R.id.fab4)
-    FloatingActionButton fab4;
-
 
     @Bind(R.id.content)
     CoordinatorLayout clContent;
@@ -225,25 +217,29 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
         startingActivity.startActivity(intent);
     }
 
-    @OnClick (R.id.fab2)
-    public void go (){
-        Intent intent = new Intent(this, GalleryActivity.class);
-        startActivity(intent);
-    }
-
-    @OnClick (R.id.fab3)
-    public void toDiscvoer (){
-        Intent intent = new Intent(this, SearchUserActivity.class);
-        startActivity(intent);
-    }
-
-    @OnClick (R.id.fab4)
-    public void toActivity (){
-        Intent intent = new Intent(this, ActivityFeedAcitivity.class);
-        startActivity(intent);
-    }
-
     public void getImageUriList (){
 
+    }
+
+    // Back Twice to exit
+    boolean doubleBackToExitPressedOnce = false;
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 }

@@ -1,22 +1,13 @@
 package fanx.instl.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
-import android.widget.ListView;
-
-import java.util.ArrayList;
+import android.view.KeyEvent;
 
 import fanx.instl.R;
-import fanx.instl.activity.InstagramUtils.DisplayMediaLikeUserTask;
-import fanx.instl.activity.InstagramUtils.InstagramRetrieveUserMediaTask;
 
-public class ActivityFeedAcitivity extends AppCompatActivity {
+public class ActivityFeedAcitivity extends BaseDrawerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,4 +36,15 @@ public class ActivityFeedAcitivity extends AppCompatActivity {
         });*/
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            Intent intent = new Intent(getBaseContext(), MainActivity.class);
+            startActivity(intent);
+             finish();
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
 }
