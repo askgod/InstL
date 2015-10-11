@@ -6,14 +6,15 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.TabHost;
-import android.widget.TableLayout;
+import android.widget.Toast;
+
+import java.io.File;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -21,16 +22,12 @@ import fanx.instl.R;
 
 public class ImageDetailActivity extends AppCompatActivity {
     ImageView gallery_imageView;
-    private String imageURI;
+    private String imageURI = null;
+    private String imageName = null;
 
     @Bind(R.id.fab_edit)
     FloatingActionButton fab_edit;
 
-    @Bind(R.id.action_delete)
-    FloatingActionButton action_delete;
-
-    @Bind(R.id.action_share)
-    FloatingActionButton action_share;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +39,13 @@ public class ImageDetailActivity extends AppCompatActivity {
         Intent previousIntent = getIntent();
         imageURI = previousIntent.getStringExtra("picPath");
         Log.v("pic path", imageURI);
+        imageName = imageURI.substring(26,43);
+        setTitle(imageName);
+
         gallery_imageView = (ImageView)findViewById(R.id.gallery_imageView);
         Bitmap bitmap = BitmapFactory.decodeFile(imageURI);
-
         gallery_imageView.setImageBitmap(bitmap);
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -55,15 +55,47 @@ public class ImageDetailActivity extends AppCompatActivity {
 
         return true;
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_share:
+                share();
+                return true;
+            case R.id.action_delete:
+                deleteImage(imageURI);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
-    @OnClick (R.id.action_share)
-    public void action_share() {
+    private Toast toast;
+    private void deleteImage(String imageURI) {
+        File file = new File(imageURI);
+        boolean deleted = file.delete();
+        String deleteStatus = " Deleted!";
+        Log.i("info", "File: " + imageURI + String.valueOf(deleted));
+        if (deleted != true ){
+            deleteStatus = " Delete fail!";
+        }
+        toast = Toast.makeText(this, "File: " + imageURI + deleteStatus,
+                Toast.LENGTH_SHORT);
+        toast.show();
+        finish();
+    }
+
+    public void share() {
         Log.i("info", String.valueOf(imageURI));
         Uri imagePath = Uri.parse(imageURI);
         PublishActivity.openWithPhotoUri(this, imagePath);
         finish();
     }
 
+    @OnClick (R.id.fab)
+    public void edit_Image (){
+
+    }
 
 }
 

@@ -114,7 +114,9 @@ public class GalleryActivity extends BaseDrawerActivity {
                         bitmap = BitmapFactory.decodeFile(paths[i], options);
                         newBitmap = ThumbnailUtils.extractThumbnail(bitmap,
                                 330, 330);
-                        bitmap.recycle();
+                        if (bitmap != null) {
+                            bitmap.recycle();
+                        }
                         if (newBitmap != null) {
                             publishProgress(new LoadedImage(newBitmap,paths[i] ));
                         }
@@ -219,5 +221,13 @@ public class GalleryActivity extends BaseDrawerActivity {
             toast.setText(arg);
         }
         toast.show();
+    }
+
+    public void onPause() {
+        super.onPause();
+    }
+
+    public void onResume() {
+        super.onResume();
     }
 }
