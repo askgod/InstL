@@ -77,13 +77,14 @@
                     android:layout_weight="1" />
 
                 <ImageButton
-                    android:id="@+id/camera_edit"
+                    android:id="@+id/camera_bright"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:background="@drawable/btn_default_light"
                     android:src="@drawable/ic_brightness_6_white_24dp" />
 
                 <ImageButton
+                    android:id="@+id/camera_crop"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginLeft="8dp"

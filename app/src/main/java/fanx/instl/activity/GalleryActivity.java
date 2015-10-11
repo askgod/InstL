@@ -1,5 +1,6 @@
 package fanx.instl.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -25,10 +26,18 @@ import java.io.File;
 import java.util.ArrayList;
 
 import fanx.instl.R;
+import fanx.instl.ui.RevealBackgroundView;
 
-public class GalleryActivity extends BaseDrawerActivity {
+public class GalleryActivity extends BaseDrawerActivity implements RevealBackgroundView.OnStateChangeListener{
     private GridView gallery_grid;
     private FileAdapter fileAdapter;
+    public static final String ARG_REVEAL_START_LOCATION = "reveal_start_location";
+
+    public static void startGalleryFromLocation(int[] startingLocation, Activity startingActivity) {
+        Intent intent = new Intent(startingActivity, GalleryActivity.class);
+        intent.putExtra(ARG_REVEAL_START_LOCATION, startingLocation);
+        startingActivity.startActivity(intent);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +86,11 @@ public class GalleryActivity extends BaseDrawerActivity {
             fileAdapter.addPhoto(image);
             fileAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void onStateChange(int state) {
+
     }
 
     /*

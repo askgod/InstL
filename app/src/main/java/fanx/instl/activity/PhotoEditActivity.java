@@ -1,12 +1,11 @@
 package fanx.instl.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -19,17 +18,21 @@ import java.io.File;
 
 import fanx.instl.R;
 
-public class ImageDetailActivity extends AppCompatActivity {
-    ImageView gallery_imageView;
+public class PhotoEditActivity extends BaseActivity {
+    public static final String ARG_REVEAL_START_LOCATION = "reveal_start_location";
+    ImageView edit_imageView;
     private String imageURI = null;
     private String imageName = null;
+    Bitmap bitmap = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_detail2);
+        setContentView(R.layout.activity_photo_edit);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        View view = findViewById(R.id.edit_imageView);
+        view.setBackgroundColor(0xFF000000);
 
         Intent previousIntent = getIntent();
         imageURI = previousIntent.getStringExtra("picPath");
@@ -37,26 +40,15 @@ public class ImageDetailActivity extends AppCompatActivity {
         imageName = imageURI.substring(26,43);
         setTitle(imageName);
 
-        gallery_imageView = (ImageView)findViewById(R.id.gallery_imageView);
+        edit_imageView = (ImageView)findViewById(R.id.edit_imageView);
         Bitmap bitmap = BitmapFactory.decodeFile(imageURI);
-        gallery_imageView.setImageBitmap(bitmap);
+        edit_imageView.setImageBitmap(bitmap);
 
-        FloatingActionButton fab_edit = (FloatingActionButton)findViewById(R.id.fab_edit);
-        fab_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("info", "Jump to edit" + imageURI);
-                Intent intent = new Intent(ImageDetailActivity.this,PhotoEditActivity.class);
-                intent.putExtra("picPath", imageURI);
-                startActivity(intent);
-
-            }
-        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_imagedetail, menu);
+        getMenuInflater().inflate(R.menu.menu_view_edit_photo, menu);
         super.onCreateOptionsMenu(menu);
 
         return true;
@@ -65,8 +57,8 @@ public class ImageDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
-            case R.id.action_share:
-                share();
+            case R.id.action_crop:
+                crop();
                 return true;
             case R.id.action_delete:
                 deleteImage(imageURI);
@@ -74,6 +66,41 @@ public class ImageDetailActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void crop() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
+        intent.setType("image/*");
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 2);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", 200);
+        intent.putExtra("outputY", 100);
+        intent.putExtra("scale", true);
+        intent.putExtra("return-data", false);
+        intent.putExtra("output", imageURI);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        intent.putExtra("noFaceDetection", false);
+        startActivityForResult(intent, 1);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {// result is not correct
+            return;
+        } else {
+            switch (requestCode) {
+                case 1:
+                    if (imageURI != null) {
+                        bitmap = BitmapFactory.decodeFile(imageURI);
+                        edit_imageView.setImageBitmap(bitmap);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        edit_imageView.setImageBitmap(bitmap);
     }
 
     private Toast toast;
@@ -97,6 +124,7 @@ public class ImageDetailActivity extends AppCompatActivity {
         PublishActivity.openWithPhotoUri(this, imagePath);
         finish();
     }
+
 
 
 }

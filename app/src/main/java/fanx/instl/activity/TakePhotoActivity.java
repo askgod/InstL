@@ -13,7 +13,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Build;
@@ -30,12 +29,10 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.net.URISyntaxException;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -122,8 +119,17 @@ public class TakePhotoActivity extends BaseActivity
     @Bind(R.id.camera_grid_line)
     ImageView camera_grid_line;
 
+    //@Bind(R.id.camera_bright)
+    //ImageButton camera_bright;
+
     private Camera mCamera;
     private CameraPreview mPreview;
+
+    private static String fullPath;
+
+    Bitmap bitmap;
+
+    private int pick_result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +138,6 @@ public class TakePhotoActivity extends BaseActivity
         updateStatusBarColor();
         updateState(STATE_TAKE_PHOTO);
         setupRevealBackground(savedInstanceState);
-        setupPhotoFilters();
         camera_grid_line.setVisibility(View.INVISIBLE);
         //
 
@@ -158,6 +163,8 @@ public class TakePhotoActivity extends BaseActivity
         FrameLayout preview = (FrameLayout) findViewById(R.id.cameraView);
         preview.addView(mPreview);
 
+        fullPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/InstL/";
+
 
     }
 
@@ -182,17 +189,12 @@ public class TakePhotoActivity extends BaseActivity
         }
     }
 
-    private void setupPhotoFilters() {
-        //PhotoFiltersAdapter photoFiltersAdapter = new PhotoFiltersAdapter(this);
-        //rvFilters.setHasFixedSize(true);
-        //rvFilters.setAdapter(photoFiltersAdapter);
-        //camera_filter1.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-    }
-
     @Override
     protected void onResume() {
+        if (pick_result == RESULT_OK){
+            mCamera.release();
+        }
         super.onResume();
-
     }
 
     @Override
@@ -231,17 +233,6 @@ public class TakePhotoActivity extends BaseActivity
 
         animateShutter();
 
-    }
-
-    public static Bitmap convertViewToBitmap(View view)
-    {
-        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
-        view.buildDrawingCache();
-        Bitmap bitmap = view.getDrawingCache();
-
-        return bitmap;
     }
 
 
@@ -318,8 +309,8 @@ public class TakePhotoActivity extends BaseActivity
 
     private void saveImage(){
         String filename = String.valueOf(System.currentTimeMillis());
-        Bitmap bitmap = loadBitmapFromView(ivTakenPhoto);
-        String fullPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/InstL/";
+        bitmap = loadBitmapFromView(ivTakenPhoto);
+;
         File file = new File(fullPath + filename + ".jpg");
         File dir = new File(fullPath);
         try {
@@ -409,50 +400,6 @@ public class TakePhotoActivity extends BaseActivity
         v.draw(c);
         return b;
     }
-    // FILE CHOOSER
-    private static final int FILE_SELECT_CODE = 0;
-
-    private void showFileChooser() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        mPreview.getHolder().removeCallback(mPreview);
-        try {
-            startActivityForResult(
-                    Intent.createChooser(intent, "Select a File to Upload"),
-                    FILE_SELECT_CODE);
-        } catch (android.content.ActivityNotFoundException ex) {
-            // Potentially direct the user to the Market with a Dialog
-            Toast.makeText(this, "Please install a File Manager.",
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case FILE_SELECT_CODE:
-                if (resultCode == RESULT_OK) {
-                    // Get the Uri of the selected file
-                    Uri uri = data.getData();
-                    Log.d(TAG, "File Uri: " + uri.toString());
-                    // Get the path
-                    String path = null;
-                    try {
-                        path = Utils.getPath(this, uri);
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
-                    }
-                    Log.d(TAG, "File Path: " + path);
-                    // Get the file instance
-                    // File file = new File(path);
-                    // Initiate the upload
-                }
-                break;
-
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 
     // CLick listener
     @OnClick (R.id.btn_file_chooser)
@@ -460,7 +407,11 @@ public class TakePhotoActivity extends BaseActivity
         Log.i("info", "Choose file");
         mCamera.stopPreview();
         mCamera.release();
-        showFileChooser();
+        int[] startingLocation = new int[2];
+        btn_file_chooser.getLocationOnScreen(startingLocation);
+        startingLocation[0] += btn_file_chooser.getWidth() / 2;
+        GalleryActivity.startGalleryFromLocation(startingLocation, this);
+        overridePendingTransition(0, 0);
     }
 
 
@@ -499,11 +450,16 @@ public class TakePhotoActivity extends BaseActivity
         Log.i("info", "Filters change cool");
         Drawable[] layers = new Drawable[2];
         //layers[0] = myDrawable;
-        layers[1] = getResources().getDrawable(R.drawable.filter1);
-        LayerDrawable layerDrawable = new LayerDrawable(layers);
-        ivTakenPhoto.setImageDrawable(layerDrawable);
+        //layers[1] = getResources().getDrawable(R.drawable.filter1);
+       // LayerDrawable layerDrawable = new LayerDrawable(layers);
+        //ivTakenPhoto.setImageDrawable(layerDrawable);
         // TODO
     }
+
+   /* @OnClick (R.id.camera_bright)
+    public void changeBright(){
+        vLowerPanel.showNext();
+    }*/
 
     // Animations
 
@@ -565,4 +521,61 @@ public class TakePhotoActivity extends BaseActivity
         intent.putExtra(ARG_REVEAL_START_LOCATION, startingLocation);
         startingActivity.startActivity(intent);
     }
+
+    // FILE CHOOSER
+    /*
+    ------------------- For further develop ---------------
+    //
+    private static final int FILE_SELECT_CODE = 0;
+
+    private void showFileChooser() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        try {
+            startActivityForResult(
+                    Intent.createChooser(intent, "Select a File to Upload"),
+                    FILE_SELECT_CODE);
+        } catch (android.content.ActivityNotFoundException ex) {
+            // Potentially direct the user to the Market with a Dialog
+            Toast.makeText(this, "Please install a File Manager.",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String path = null;
+        pick_result = resultCode;
+        switch (requestCode) {
+            case FILE_SELECT_CODE:
+                if (resultCode == RESULT_OK) {
+                    // Get the Uri of the selected file
+                    Uri uri = data.getData();
+                    Log.d(TAG, "File Uri: " + uri.toString());
+                    // Get the path
+                    path = uri.toString();
+                    try {
+                        path = Utils.getPath(this, uri);
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                    Log.d(TAG, "File Path: " + path);
+                    // Get the file instance
+                    // File file = new File(path);
+                    // Initiate the upload
+                }
+                break;
+
+        }
+        if (path != null) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 1;
+            bitmap = BitmapFactory.decodeFile(path, options);
+            Log.d(TAG, "File Uri: " + path);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }*/
+
 }

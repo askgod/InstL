@@ -108,6 +108,7 @@ public class PublishActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_publish) {
+            // TODO
             bringMainActivityToTop();
             return true;
         } else {
