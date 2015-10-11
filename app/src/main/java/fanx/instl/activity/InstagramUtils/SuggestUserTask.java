@@ -8,6 +8,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import android.util.Log;
+import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -24,18 +26,20 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import fanx.instl.activity.SearchUserActivity;
+
 /**
  * Created by SShrestha on 7/10/2015.
  */
 public class SuggestUserTask extends AsyncTask <Void, Void, ArrayList<SuggestUserTask.InstaUser>>{
     private final int TIMEOUT_SEC = 5;
     private Context appContext;
-    private TextView textView_Message;
+    private ListView listView;
     private int count;
 
-    public SuggestUserTask(Context appContext, TextView textView_Message, int count){
+    public SuggestUserTask(Context appContext, ListView listView, int count){
         this.appContext = appContext;
-        this.textView_Message = textView_Message;
+        this.listView  = listView;
         this.count = count;
     }
     @Override
@@ -92,7 +96,7 @@ public class SuggestUserTask extends AsyncTask <Void, Void, ArrayList<SuggestUse
                                 if (instaUser.toString() != null)
                                     mInstaUsers.add(getInstaUserData(userId));
                             } catch (Exception e) {
-                                Log.e("InstaUser", "Missing Values ... ("+userId+")");
+                                //Log.e("InstaUser", "Missing Values ... ("+userId+")");
                             }
                         }
                     });
@@ -105,6 +109,7 @@ public class SuggestUserTask extends AsyncTask <Void, Void, ArrayList<SuggestUse
 
                 if (finshed) {
                     Log.e("SuggestedUserTask", "mInstaUsers"+mInstaUsers.size());
+                    Collections.sort(mInstaUsers, new CustomComparator());
                     return mInstaUsers;
                 }
 
@@ -120,20 +125,34 @@ public class SuggestUserTask extends AsyncTask <Void, Void, ArrayList<SuggestUse
     @Override
     protected void onPostExecute(ArrayList<InstaUser> result)
     {
-        Collections.sort(result, new CustomComparator());
+        if (result != null){
 
-        String txt = "";
-        int i = 0;
-        for (InstaUser iu:result) {
-            try{
-                txt= txt+iu.toString()+"\n----------------\n";}
-            catch (Exception e)
-            {}
+            int i = 0;
 
-            if (i++>count)
-                break;
+            ArrayList<InstagramUser> r = new ArrayList<InstagramUser>();
+
+            for (InstaUser iu:result) {
+                try{
+                    r.add(iu);
+                }
+                catch (Exception e)
+                {}
+
+                if (i++>count)
+                    break;
+            }
+
+            listView.setAdapter(new InstagramUserSearchTask.SearchResultAdapter(appContext, r));
+            listView.setVisibility(ListView.VISIBLE);
+            Log.w("Info", "Exit gracefully!");
         }
-        textView_Message.setText(Integer.toString(result.size())+"\n"+txt);
+        /*String txt = "";
+        for (InstagramUser iu:r) {
+                txt= txt+iu.toString()+"\n----------------\n";
+
+        }
+        Log.w("Info","Result Count: "+Integer.toString(result.size())+"\n"+txt);*/
+
     }
 
 
@@ -173,6 +192,7 @@ public class SuggestUserTask extends AsyncTask <Void, Void, ArrayList<SuggestUse
     {
         try {
             String urlString = AppData.API_URL + "/users/"+userId+"/?access_token="+AppData.getAccessToken(appContext);
+            //Log.e("URL", urlString);
             URL url = new URL(urlString);
             HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -184,12 +204,23 @@ public class SuggestUserTask extends AsyncTask <Void, Void, ArrayList<SuggestUse
                 JSONObject jsonObj = (JSONObject) new JSONTokener(response).nextValue();
                 JSONObject data = jsonObj.getJSONObject("data");
                 JSONObject counts = data.getJSONObject("counts");
+                String full_name =  data.getString("full_name");
+                int separator = 0;
+                try {
+                    separator = full_name.indexOf(" ");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 InstaUser i = new InstaUser(userId,
+                        data.getString("username"),
                         counts.getString("follows"),
                         counts.getString("followed_by"),
                         counts.getString("media"),
-                        data.getString("profile_picture"));
+                        data.getString("profile_picture"),
+                        separator>0?full_name.substring(0, separator):full_name,
+                        separator>0?full_name.substring(separator+1, full_name.length()-separator):""
+                );
 
 
                 return i;
@@ -203,27 +234,28 @@ public class SuggestUserTask extends AsyncTask <Void, Void, ArrayList<SuggestUse
 
     public class InstaUser extends InstagramUser
     {
-        public String userId;
+        //inherited
+        //public String id;
+        //public String username;
+        //public String profile_picture;
+        //public String first_name;
+        //public String last_name;
+
         public String follows;
         public String followed_by;
         public String media;
-        public String profile_picture;
 
-        public String id;
-        public String username;
-        public String first_name;
-        public String last_name;
-
-
-
-        public InstaUser(String userId,
+        public InstaUser(String id,
+                         String username,
                          String follows,
                          String followed_by,
                          String media,
-                         String profile_picture)
+                         String profile_picture,
+                         String first_name,
+                         String last_name)
         {
-            this.userId = userId;
-
+            this.id = id;
+            this.username = username;
             if (follows == null)
                 this.follows = "0";
             else
@@ -240,12 +272,21 @@ public class SuggestUserTask extends AsyncTask <Void, Void, ArrayList<SuggestUse
                 this.media = media;
 
             this.profile_picture = profile_picture;
+            this.first_name = first_name;
+            this.last_name = last_name;
 
         }
 
 
         public String toString(){
-            return "USERID: "+userId+"\nFollows: "+follows+"\nFollowedBy: "+ followed_by+"\nMedia: "+media+"\nProfile Pic: "+profile_picture;
+            return "USERID: "+id
+                    +"\nUsername: "+username
+                    +"\nFirstname: "+ first_name
+                    +"\nLastname: "+last_name
+                    +"\nFollows: "+follows
+                    +"\nFollowedBy: "+ followed_by
+                    +"\nMedia: "+media
+                    +"\nProfile Pic: "+profile_picture;
         }
 
     }
