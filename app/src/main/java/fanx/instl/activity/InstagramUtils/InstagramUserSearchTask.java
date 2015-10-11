@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -78,11 +79,12 @@ public class InstagramUserSearchTask extends AsyncTask<String,Void,ArrayList<Ins
         Log.e("InstagramUserSearchTask","onPostExecute" );
         if (result != null){
             listView.setAdapter(new SearchResultAdapter(context, result));
+            listView.setVisibility(SearchView.VISIBLE);
         }
 
     }
 
-    private class SearchResultAdapter extends BaseAdapter{
+    public static class SearchResultAdapter extends BaseAdapter{
         int count;
         private LayoutInflater layoutInflater;
         private ArrayList<InstagramUser> instagramUsers = new ArrayList<InstagramUser>();
@@ -145,7 +147,7 @@ public class InstagramUserSearchTask extends AsyncTask<String,Void,ArrayList<Ins
 
     }
 
-    private class ViewHolder{
+    private static class ViewHolder{
         public TextView textView_fullname;
         public TextView textView_username;
         public TextView textView_userid;

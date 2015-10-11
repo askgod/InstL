@@ -9,6 +9,7 @@ import android.widget.SearchView;
 
 import fanx.instl.R;
 import fanx.instl.activity.InstagramUtils.InstagramUserSearchTask;
+import fanx.instl.activity.InstagramUtils.SuggestUserTask;
 
 public class SearchUserActivity extends AppCompatActivity {
 
@@ -17,8 +18,6 @@ public class SearchUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_user);
         final ListView searchResultListView = (ListView) findViewById(R.id.searchResultListView);
-
-
 
         SearchView searchUserView =  (SearchView) findViewById(R.id.searchUserView);
         searchUserView.setQueryHint("Search Text Here");
@@ -38,9 +37,9 @@ public class SearchUserActivity extends AppCompatActivity {
                     InstagramUserSearchTask instagramUserSearchTask =
                             new InstagramUserSearchTask(SearchUserActivity.this, 25, searchResultListView);
                     instagramUserSearchTask.execute(query.replace(" ", "+"));
-                    searchResultListView.setVisibility(SearchView.VISIBLE);
+                    //searchResultListView.setVisibility(SearchView.VISIBLE);
                 } else {
-                    searchResultListView.setVisibility(SearchView.INVISIBLE);
+                    //searchResultListView.setVisibility(SearchView.INVISIBLE);
                 }
                 return true;
             }
@@ -55,5 +54,9 @@ public class SearchUserActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        //By default returns the suggested users
+        SuggestUserTask s = new SuggestUserTask(getApplicationContext(), searchResultListView, 15);
+        s.execute();
     }
 }

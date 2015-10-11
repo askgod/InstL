@@ -11,4 +11,8 @@ public class InstagramUser {
     public String last_name;
     public String profile_picture;
 
+    public String toString(){
+        return "USERID: "+id+"\nUsername: "+username+"\nFirstname: "+ first_name+"\nLastname: "+last_name+"\nProfile Pic: "+profile_picture;
+    }
+
 }
