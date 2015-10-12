@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.widget.ListView;
 
 import fanx.instl.R;
+import fanx.instl.activity.InstagramUtils.DisplayMediaLikeUserTask;
 
 public class ActivityFeedAcitivity extends BaseDrawerActivity {
 
@@ -15,6 +17,10 @@ public class ActivityFeedAcitivity extends BaseDrawerActivity {
         setContentView(R.layout.activity_activity_feed_acitivity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ListView activityFeedListView = (ListView)findViewById(R.id.activityFeedListView);
+        DisplayMediaLikeUserTask d = new DisplayMediaLikeUserTask(getApplicationContext(), activityFeedListView);
+        d.execute("1092484232200772082_2219605693");
 
         /*ListView activityFeedListView = (ListView)findViewById(R.id.activityFeedListView);
 
