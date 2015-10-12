@@ -16,5 +16,6 @@
         android:layout_height="300px"
         android:layout_alignParentRight="true"
         android:layout_alignRight="@id/userInfoText"
-        android:src="@drawable/Loading_gif" />
+        android:src="@drawable/loading_gif" />
+
 </RelativeLayout>
