@@ -41,7 +41,7 @@ public class ActivityFeedAcitivity extends BaseDrawerActivity {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             Intent intent = new Intent(getBaseContext(), MainActivity.class);
             startActivity(intent);
-             finish();
+            finish();
             return true;
         }
 

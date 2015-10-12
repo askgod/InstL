@@ -65,7 +65,7 @@ public class SearchUserActivity extends BaseDrawerActivity{
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            Intent intent = new Intent(getBaseContext(), MainActivity.class);
+            Intent intent = new Intent(getBaseContext(), UserFeedActivity.class);
             startActivity(intent);
             finish();
             return true;

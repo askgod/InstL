@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+
+    <fanx.instl.ui.RoundedImageView
+        android:id="@+id/feed_profile_pic"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_launcher"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:layout_gravity="left"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="USER"
+        android:id="@+id/feed_username"
+        android:textColor="#04317e"
+        android:textSize="15dp"
+        android:layout_toRightOf="@id/feed_profile_pic"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="2dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="USER"
+        android:id="@+id/feed_timestamp"
+        android:textColor="#04317e"
+        android:textSize="15dp"
+
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="15dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="2dp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:id="@+id/feed_location"
+        android:textColor="#04317e"
+        android:textSize="15dp"
+        android:layout_toRightOf="@id/feed_profile_pic"
+        android:layout_below="@+id/feed_username"
+        android:layout_marginTop="0dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="10dp" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/standard_resolution_pic"
+        android:src="@drawable/icon_2_n"
+        android:layout_below="@+id/feed_location"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:layout_gravity="left"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+
+        />
+
+    <LinearLayout
+        android:layout_alignParentLeft="true"
+        android:id="@+id/feed_placeholder_main"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/standard_resolution_pic"
+        android:background="#05d8fd"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+        <LinearLayout
+            android:layout_alignParentLeft="true"
+            android:id="@+id/feed_placeholder"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/standard_resolution_pic"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="left"
+            >
+
+            <fanx.instl.ui.RoundedImageView
+                android:id="@+id/feed_likes_pic"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/feed_heart"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="false"
+                android:layout_gravity="left"
+                android:layout_marginLeft="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="USER"
+                android:id="@+id/feed_likes"
+                android:textColor="#04317e"
+                android:textSize="12dp"
+                android:layout_marginLeft="5dp"
+
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_alignParentRight="true"
+            android:id="@+id/feed_placeholder1"
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/standard_resolution_pic"
+            android:layout_gravity="right"
+            android:layout_marginRight="15dp"
+            android:gravity="right">
+
+            <fanx.instl.ui.RoundedImageView
+                android:id="@+id/feed_comments_pic"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/feed_comments"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="false"
+                android:layout_gravity="left"
+                android:layout_marginLeft="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="USER"
+                android:id="@+id/feed_comments"
+                android:textColor="#04317e"
+                android:textSize="12dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="15dp"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="right"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CAPTION"
+        android:id="@+id/feed_media_id"
+        android:layout_below="@+id/feed_placeholder_main"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textColor="#000000"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CAPTION"
+        android:id="@+id/feed_caption"
+        android:layout_below="@+id/feed_placeholder_main"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textColor="#000000"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp" />
+
+</RelativeLayout>

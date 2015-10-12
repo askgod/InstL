@@ -4,18 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import fanx.instl.R;
 import fanx.instl.activity.InstagramUtils.AppData;
-import fanx.instl.activity.InstagramUtils.InstagramUserSearchTask;
 
 public class AppStart extends Activity {
     private final int SPLASH_DISPLAY_LENGTH = 1000;
@@ -35,7 +30,7 @@ public class AppStart extends Activity {
 
                         //Create an Intent that will start the Main Activity.
                         Toast.makeText(AppStart.this, "Redirecting to MainActivity ...", Toast.LENGTH_LONG);
-                        Intent mainIntent = new Intent(AppStart.this, MainActivity.class);
+                        Intent mainIntent = new Intent(AppStart.this, UserFeedActivity.class);
                         startActivity(mainIntent);
 
                         //This is example call for for Search User

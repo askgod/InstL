@@ -262,7 +262,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 updateLikesCounter(holder, true);
                 updateHeartButton(holder, true);
                 if (context instanceof MainActivity) {
-                    ((MainActivity) context).showLikedSnackbar();
+
+                    //((MainActivity) context).showLikedSnackbar();
                 }
             }
         } else if (viewId == R.id.ivFeedCenter) {
@@ -273,7 +274,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 animatePhotoLike(holder);
                 updateHeartButton(holder, false);
                 if (context instanceof MainActivity) {
-                    ((MainActivity) context).showLikedSnackbar();
+                    //((MainActivity) context).showLikedSnackbar();
                 }
             }
         } else if (viewId == R.id.ivUserProfile) {

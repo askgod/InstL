@@ -43,10 +43,19 @@
             android:label="Login" >
         </activity>
         <!-- Main Activity -->
-        <activity
+<!--        <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
+            &lt;!&ndash;<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>&ndash;&gt;
+        </activity>-->
+        <activity
+            android:name=".activity.UserFeedActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme" >
             <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -97,10 +106,10 @@
             android:value=".activity.ImageDetailActivity" />
     </activity>
         <activity
-            android:name=".activity.UserFeedActivity"
-            android:label="@string/title_activity_user_feed"
-            android:theme="@style/AppTheme" >
-        </activity>
+        android:name=".activity.UserFeedCommentsActivity"
+        android:label="@string/title_activity_user_feed"
+        android:theme="@style/AppTheme" >
+    </activity>
     </application>
 
 </manifest>

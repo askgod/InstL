@@ -94,8 +94,8 @@ public class UserProfileActivity extends BaseDrawerActivity implements RevealBac
                 profile_followed_byCounts,
                 ivUserProfilePhoto);
         instagramUser.execute();
-
-         InstagramRetrieveUserMediaTask instagramRetrieveUserMediaTask =
+        setRoundImage();
+        InstagramRetrieveUserMediaTask instagramRetrieveUserMediaTask =
                  new InstagramRetrieveUserMediaTask(this,(GridView) findViewById(R.id.gridView2));
         instagramRetrieveUserMediaTask.execute();
         //
@@ -103,7 +103,7 @@ public class UserProfileActivity extends BaseDrawerActivity implements RevealBac
         //setupUserProfileGrid();
         setupRevealBackground(savedInstanceState);
         //
-        setRoundImage();
+
 
 
         //

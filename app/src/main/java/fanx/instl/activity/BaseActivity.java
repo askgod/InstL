@@ -48,7 +48,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        inboxMenuItem = menu.findItem(R.id.action_inbox);
+        inboxMenuItem = menu.findItem(R.id.action_sort_by_location);
         inboxMenuItem.setActionView(R.layout.menu_item_view);
         return true;
     }

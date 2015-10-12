@@ -109,7 +109,7 @@ public class BaseDrawerActivity extends BaseActivity
 
         if (id == R.id.menu_feed) {
             // Handle the camera action
-            Intent intent = new Intent(getBaseContext(), MainActivity.class);
+            Intent intent = new Intent(getBaseContext(), UserFeedActivity.class);
             drawer.closeDrawer(GravityCompat.START);
             startActivity(intent);
             finish();

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+    <LinearLayout
+        android:layout_alignParentLeft="true"
+        android:id="@+id/feed_placeholder_main"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+        <fanx.instag.activities.util.RoundedImageView
+            android:id="@+id/feed_profile_pic"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_launcher"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="left"
+            android:layout_marginLeft="10dp"
+            />
+
+        <LinearLayout
+            android:layout_alignParentLeft="true"
+            android:id="@+id/feed_placeholder"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_gravity="left"
+            >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="USER"
+                android:id="@+id/feed_username"
+                android:textColor="#04317e"
+                android:textSize="12dp"
+                android:layout_marginLeft="5dp"
+
+                />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="USER"
+                android:id="@+id/feed_comments"
+                android:textColor="#04317e"
+                android:textSize="12dp"
+                android:layout_marginLeft="5dp"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

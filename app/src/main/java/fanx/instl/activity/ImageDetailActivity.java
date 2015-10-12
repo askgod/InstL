@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -19,10 +18,10 @@ import java.io.File;
 
 import fanx.instl.R;
 
-public class ImageDetailActivity extends AppCompatActivity {
+public class ImageDetailActivity extends BaseActivity {
     ImageView gallery_imageView;
-    private String imageURI = null;
-    private String imageName = null;
+    private String imageURI = "N/A";
+    private String imageName = "N/A";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +32,7 @@ public class ImageDetailActivity extends AppCompatActivity {
 
         Intent previousIntent = getIntent();
         imageURI = previousIntent.getStringExtra("picPath");
+
         Log.v("pic path", imageURI);
         imageName = imageURI.substring(26,43);
         setTitle(imageName);
