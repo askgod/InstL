@@ -66,52 +66,34 @@ public class InstagramCurrentUserProfile extends AsyncTask <Void, Void, JSONObje
         this.textView_full_name = textView_full_name;
         this.context_userProfileActivity = context_userProfileActivity;
     }
-    // 3rd constructor by FanX
-    public InstagramCurrentUserProfile(Context context_userProfileActivity,
-                                       TextView textView_full_name,
-                                       TextView textView_website,
-                                       TextView textView_mediaCounts,
-                                       TextView textView_followsCounts,
-                                       TextView textView_followed_byCounts,
-                                       ImageView imageView_profile_picture)
-    {
-        this.textView_full_name = textView_full_name;
-        this.textView_website = textView_website;
-        this.textView_mediaCounts = textView_mediaCounts;
-        this.textView_followsCounts = textView_followsCounts;
-        this.textView_followed_byCounts = textView_followed_byCounts;
-        this.imageView_profile_picture = imageView_profile_picture;
-        this.context_userProfileActivity = context_userProfileActivity;
-
-    }
 
 
     protected JSONObject doInBackground(Void... params) {
 
 
-                try {
+        try {
 
-                    String profileURL = API_URL + "/users/" + AppData.getUserId(context_userProfileActivity) + "/?access_token=" + AppData.getAccessToken(context_userProfileActivity);
-                    URL url = new URL(profileURL);
-                    HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
-                    urlConnection.setRequestMethod("GET");
-                    urlConnection.setDoInput(true);
-                    urlConnection.connect();
-                    String response = AppData.streamToString(urlConnection.getInputStream());
+            String profileURL = API_URL + "/users/" + AppData.getUserId(context_userProfileActivity) + "/?access_token=" + AppData.getAccessToken(context_userProfileActivity);
+            URL url = new URL(profileURL);
+            HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoInput(true);
+            urlConnection.connect();
+            String response = AppData.streamToString(urlConnection.getInputStream());
 
-                    JSONObject jsonObj = (JSONObject) new JSONTokener(response).nextValue();
-                    JSONObject result = jsonObj.getJSONObject("data");
-                    urlConnection.disconnect();
+            JSONObject jsonObj = (JSONObject) new JSONTokener(response).nextValue();
+            JSONObject result = jsonObj.getJSONObject("data");
+            urlConnection.disconnect();
 
-                    // Extract string URL of profile picture - by Fan
-                    profile_image_url = result.getString("profile_picture");
-                    Log.v("profile_image_url ", result.getString("profile_picture"));
+            // Extract string URL of profile picture - by Fan
+            profile_image_url = result.getString("profile_picture");
+            Log.v("profile_image_url ", result.getString("profile_picture"));
 
-                    return result;
+            return result;
 
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
 
         return null;
     }

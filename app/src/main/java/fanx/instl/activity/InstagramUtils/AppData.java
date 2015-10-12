@@ -107,26 +107,6 @@ public class AppData {
         return str;
     }
 
-    public static void createInstagramIntent(String type, String mediaPath, Context context){
-
-        // Create the new Intent using the 'Send' action.
-        Intent share = new Intent(Intent.ACTION_SEND);
-
-        // Set the MIME type
-        share.setType(type);
-
-        // Create the URI from the media
-        File media = new File(mediaPath);
-        Uri uri = Uri.fromFile(media);
-
-        // Add the URI to the Intent.
-        share.putExtra(Intent.EXTRA_STREAM, uri);
-
-        // Broadcast the Intent.
-        context.startActivity(Intent.createChooser(share, "Share to"));
-    }
-
-
     public static String getAccessToken(Context c)
     {
         SharedPreferences s = c.getSharedPreferences(SHARED, Context.MODE_PRIVATE);
@@ -147,7 +127,17 @@ public class AppData {
         return s.getString("id",null);
     }
 
+    public static String getCurrentUserName(Context c)
+    {
+        SharedPreferences s = c.getSharedPreferences(SHARED, Context.MODE_PRIVATE);
+        return s.getString("name",null);
+    }
 
+    public static String getProfileImage(Context c)
+    {
+        SharedPreferences s = c.getSharedPreferences(SHARED, Context.MODE_PRIVATE);
+        return s.getString("profile_picture",null);
+    }
 
 }
 

@@ -121,7 +121,7 @@ public class InstagramRetrieveUserMediaTask extends AsyncTask<Void, Void, Instag
         //Log.e("Media ID", result.instagramUserMediaArrayList.get(0).id);
 
         gridView.setAdapter(new CustomAdapter(context, result.instagramUserMediaArrayList));
-        //serult.instagramUserMediaURLList
+        //result.instagramUserMediaURLList
 
     }
 
